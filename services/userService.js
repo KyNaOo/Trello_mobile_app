@@ -27,8 +27,8 @@ const removeUser = async () => {
 
 const getUser = async () => {
     try {
-        const jsonUser = await AsyncStorage.getItem('USER');
-        return jsonUser != null ? JSON.parse(jsonUser) : null;
+        const jsonUser = await AsyncStorage.getItem('user');
+        return JSON.parse(jsonUser);
     } catch (e) {
         console.error(e);
     }

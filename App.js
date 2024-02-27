@@ -8,7 +8,7 @@ import RandomScreen from './screens/RandomScreen';
 import RandomScreen2 from './screens/RandomScreen2';
 import RandomScreen3 from './screens/RandomScreen3';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
-import {useEffect} from "react";
+import {useEffect, useState} from "react";
 import {userService} from "./services/userService";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
@@ -28,16 +28,21 @@ const screenOptions = {
     }
 }
 export default function App() {
-
-    useEffect(() => {
+    const [user, setUser] = useState(null)
+    const getUser = async () => {
+        setUser(await userService.getUser())
+    }
+    const endUrl = `?key=${process.env.EXPO_PUBLIC_API_KEY}&token=${process.env.EXPO_PUBLIC_API_TOKEN}`
+    useEffect( () => {
         const fetchMe = async () => {
-            const response = await fetch(`https://api.trello.com/1/members/me/?key=${process.env.EXPO_PUBLIC_API_KEY}&token=${process.env.EXPO_PUBLIC_API_TOKEN}`);
-            const user = await response.json();
+            const response = await fetch(`https://api.trello.com/1/members/me/${endUrl}`);
+            const userRes = await response.json();
             if (response.ok) {
-                userService.saveUser(user);
+                await userService.saveUser(userRes);
+                await getUser();
             }
         }
-        if (false === userService.isLogged()) {
+        if (user === null) {
             fetchMe()
         }
     }, []);
@@ -45,7 +50,7 @@ export default function App() {
 
     return (
         <>
-            <TopBar />
+            <TopBar/>
             <NavigationContainer>
                 <Tab.Navigator screenOptions={screenOptions}>
 
