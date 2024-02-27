@@ -1,5 +1,5 @@
 import React, {useCallback} from 'react';
-import {View, StyleSheet, Image, Text} from "react-native";
+import {View, StyleSheet, Image, Text, Dimensions} from "react-native";
 import {useFonts} from "expo-font";
 
 const fonts = {
@@ -28,7 +28,7 @@ const styles = StyleSheet.create({
         top: 0,
         width: "100%",
         backgroundColor: "#00171f",
-        height: 120,
+        height: Dimensions.get('window').height * 0.13,
         display: "flex",
         flexDirection:"row",
         justifyContent: "space-between",
