@@ -8,6 +8,9 @@ import RandomScreen from './screens/RandomScreen';
 import RandomScreen2 from './screens/RandomScreen2';
 import RandomScreen3 from './screens/RandomScreen3';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
+import {useEffect} from "react";
+import {userService} from "./services/userService";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -25,6 +28,20 @@ const screenOptions = {
     }
 }
 export default function App() {
+
+    useEffect(() => {
+        const fetchMe = async () => {
+            const response = await fetch(`https://api.trello.com/1/members/me/?key=${process.env.EXPO_PUBLIC_API_KEY}&token=${process.env.EXPO_PUBLIC_API_TOKEN}`);
+            const user = await response.json();
+            if (response.ok) {
+                userService.saveUser(user);
+            }
+        }
+        if (false === userService.isLogged()) {
+            fetchMe()
+        }
+    }, []);
+
 
     return (
         <>
