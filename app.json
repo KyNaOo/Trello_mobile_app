@@ -6,10 +6,18 @@
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
+    "plugins": [
+        [
+          "expo-font",
+          {
+            "fonts": ["./assets/fonts/Chillax-Regular.otf"]
+          }
+        ]
+    ],
     "splash": {
       "image": "./assets/splash.png",
       "resizeMode": "contain",
-      "backgroundColor": "#ffffff"
+      "backgroundColor": "#00171f"
     },
     "assetBundlePatterns": [
       "**/*"
