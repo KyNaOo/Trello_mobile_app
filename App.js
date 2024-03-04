@@ -10,6 +10,9 @@ import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {useEffect, useState} from "react";
 import {userService} from "./services/userService";
 import {Button, StyleSheet, Text, View} from 'react-native';
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { Entypo } from '@expo/vector-icons';
+import { Ionicons } from '@expo/vector-icons';
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -61,7 +64,8 @@ export default function App() {
                             tabBarIcon: ({focused}) => {
                                 return (
                                     <View style={{alignItems: "center", justifyContent: "center"}}>
-                                        <Text style={{fontSize: 12, color: "#16247d"}}>HOME</Text>
+                                        <Entypo name="home" size={focused ? 30 : 24} color={focused? '#00171F' : '#003459'}/>
+                                        <Text style={{fontSize: 12, color: "#16247d"}}>Home</Text>
                                     </View>
                                 )
                             }
@@ -71,7 +75,8 @@ export default function App() {
                         tabBarIcon: ({focused}) => {
                             return (
                                 <View style={{alignItems: "center", justifyContent: "center"}}>
-                                    <Text style={{fontSize: 12, color: "#16247d"}}>Random1</Text>
+                                    <Entypo name="blackboard" size={focused ? 30 : 24} color={focused? '#00171F' : '#003459'} />
+                                    <Text style={{fontSize: 12, color: "#16247d"}}>Board</Text>
                                 </View>
                             )
                         }
@@ -80,7 +85,8 @@ export default function App() {
                         tabBarIcon: ({focused}) => {
                             return (
                                 <View style={{alignItems: "center", justifyContent: "center"}}>
-                                    <Text style={{fontSize: 12, color: "#16247d"}}>Random2</Text>
+                                    <Ionicons name="settings" size={focused ? 30 : 24} color={focused? '#00171F' : '#003459'} />
+                                    <Text style={{fontSize: 12, color: "#16247d"}}>Settings</Text>
                                 </View>
                             )
                         }
@@ -89,7 +95,8 @@ export default function App() {
                         tabBarIcon: ({focused}) => {
                             return (
                                 <View style={{alignItems: "center", justifyContent: "center"}}>
-                                    <Text style={{fontSize: 12, color: "#16247d"}}>Random3</Text>
+                                    <Ionicons name="person" size={focused ? 30 : 24} color={focused? '#00171F' : '#003459'}/>
+                                    <Text style={{fontSize: 12, color: "#16247d"}}>Profil</Text>
                                 </View>
                             )
                         }
