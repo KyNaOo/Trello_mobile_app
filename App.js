@@ -5,20 +5,16 @@ import React, {useEffect, useState} from "react";
 export default function App() {
   const apiKey = process.env.EXPO_PUBLIC_API_KEY;
   const apiToken = process.env.EXPO_PUBLIC_API_TOKEN;
-  const [dataUser, setDataUser] = useState([]);
+  const [dataUser, setDataUser] = useState(undefined);
   const [dataBoard, setDataBoard] = useState([]);
 
   const getBoards = async ()=>{
-    let boards = [];
-    for (const e of dataUser.idBoards) {
-      const urlBoard = `https://api.trello.com/1/boards/${e}?key=${apiKey}&token=${apiToken}`;
-      let response = await fetch(urlBoard);
-      boards.push(await response.json())
-    }
-    setDataBoard(boards);
+    let urlBoard = `https://api.trello.com/1/members/me/boards?key=${apiKey}&token=${apiToken}`;
+    let response = await fetch(urlBoard);
+    setDataBoard(await response.json());
   };
   const getConnectedUser = async () => {
-    const urlMe = `https://api.trello.com/1/members/me/?key=${apiKey}&token=${apiToken}`
+    const urlMe = `https://api.trello.com/1/members/me/?key=${apiKey}&token=${apiToken}`;
     let result = await fetch(urlMe);
     let response = await result.json();
     setDataUser(response);
@@ -29,12 +25,11 @@ export default function App() {
   }, []);
   return (
     <View style={styles.container}>
-      <Text>Open up App.js to start working on your app!</Text>
+      <Text>Bonjour {dataUser.username}</Text>
       {
         dataBoard ?
             <View>
               <Text>{dataBoard.map((board) => {
-
                 return (<Button title={board.name}></Button>);
               })}</Text>
             </View>
