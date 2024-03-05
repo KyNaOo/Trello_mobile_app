@@ -3,7 +3,7 @@ import TopBar from "./component/TopBar";
 import {NavigationContainer} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import HomeScreen from './screens/HomeScreen';
-import RandomScreen from './screens/RandomScreen';
+import Workspaces from './screens/Workspaces';
 import RandomScreen2 from './screens/RandomScreen2';
 import RandomScreen3 from './screens/RandomScreen3';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
@@ -71,7 +71,7 @@ export default function App() {
                             }
                         }}
                     />
-                    <Tab.Screen name="Random" component={RandomScreen} options={{
+                    <Tab.Screen name="Random" component={Workspaces} options={{
                         tabBarIcon: ({focused}) => {
                             return (
                                 <View style={{alignItems: "center", justifyContent: "center"}}>
