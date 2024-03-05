@@ -49,7 +49,67 @@ export default function RandomScreen2() {
         console.error('Error making GET request:', error.message);
       }
     };
-      
+
+    const updateList = async () => {
+      try {
+        // Replace 'listId' with the actual ID of the list you want to update
+        const listId = '65e72656763aa5dfd17518e6';
+  
+        const response = await fetch(
+          `https://api.trello.com/1/lists/${listId}?${endUrl}`,
+          {
+            method: 'PUT',
+            headers: {
+              'Content-Type': 'application/json',
+              'Accept': 'application/json',
+            },
+            body: JSON.stringify({
+              name: 'damn', // New name for the list
+              closed:false
+            }),
+          }
+        );
+        if (!response.ok) {
+          console.error(`Error: ${response.status} ${response.statusText}`);
+          return;
+        }
+        const updatedList = await response.json();
+        console.warn(updatedList);
+      } catch (error) {
+        console.error('Error making PUT request:', error.message);
+      }
+    };
+
+    const closeList = async () => {
+      try {
+        // Replace 'listId' with the actual ID of the list you want to update
+        const listId = '65e72656763aa5dfd17518e6';
+  
+        const response = await fetch(
+          `https://api.trello.com/1/lists/${listId}?${endUrl}`,
+          {
+            method: 'PUT',
+            headers: {
+              'Content-Type': 'application/json',
+              'Accept': 'application/json',
+            },
+            body: JSON.stringify({
+              name: 'damn', // New name for the list
+              closed:true
+            }),
+          }
+        );
+        if (!response.ok) {
+          console.error(`Error: ${response.status} ${response.statusText}`);
+          return;
+        }
+        const updatedList = await response.json();
+        console.warn(updatedList);
+      } catch (error) {
+        console.error('Error making PUT request:', error.message);
+      }
+    };
+
     useEffect(() => {
       // Call the getAllList function when the component mounts
       getAllList();
@@ -62,7 +122,7 @@ export default function RandomScreen2() {
       onChangeText={(text) => setAddListName(text)}
     />
     <Button title="New list" onPress={addList} />
-    <Button title="Get all Lists" onPress={getAllList} />
+    <Button title="Get all Lists" onPress={closeList} />
 
     {trelloData.length > 0 && (
         <Text>{trelloData[0].name}</Text>
