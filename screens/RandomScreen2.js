@@ -1,9 +1,12 @@
 import { View, Text, TextInput, Button } from 'react-native'
 import React from 'react'
 import { useEffect, useState } from 'react';
+import List from '../component/List';
+import StickyButtonComponent from '../component/StickyButton';
 
 export default function RandomScreen2() {
   const [trelloData, setTrelloData] = useState([]);
+  const [cardData,setCardData] = useState([]);
   const [addlistName, setAddListName] = useState('');
   const endUrl = `key=${process.env.EXPO_PUBLIC_API_KEY}&token=${process.env.EXPO_PUBLIC_API_TOKEN}`;
 
@@ -33,7 +36,7 @@ export default function RandomScreen2() {
     const getAllList = async () => {
       try {
         const response = await fetch(
-          `https://api.trello.com/1/boards/65e7225541349e9de197c3df/lists?${endUrl}`
+          `https://api.trello.com/1/boards/65e7225541349e9de197c3df/lists?${endUrl}&cards=all`
         );
   
         if (!response.ok) {
@@ -42,7 +45,6 @@ export default function RandomScreen2() {
         }
   
         const data = await response.json();
-        console.warn(data);
         setTrelloData(data);
         
       } catch (error) {
@@ -114,19 +116,18 @@ export default function RandomScreen2() {
       // Call the getAllList function when the component mounts
       getAllList();
     }, []);
-  return (
-    <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+/*
     <TextInput
-      placeholder="Enter List Name"
-      value={addlistName}
-      onChangeText={(text) => setAddListName(text)}
-    />
-    <Button title="New list" onPress={addList} />
-    <Button title="Get all Lists" onPress={closeList} />
-
-    {trelloData.length > 0 && (
-        <Text>{trelloData[0].name}</Text>
-      )}
+    placeholder="Enter List Name"
+    value={addlistName}
+    onChangeText={(text) => setAddListName(text)}
+  />
+  <Button title="New list" onPress={addList} />
+  */
+  return (
+    <View>
+    <List listData={trelloData}/>
+    <StickyButtonComponent/>
   </View>
   )
 }
