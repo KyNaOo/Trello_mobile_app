@@ -1,5 +1,6 @@
 import React from 'react';
 import { View, Text, StyleSheet, ScrollView } from 'react-native';
+import edit from './edit';
 
 const List = ({ listData }) => {
   return (
