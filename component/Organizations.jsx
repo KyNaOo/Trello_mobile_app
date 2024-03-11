@@ -6,14 +6,14 @@ const Organizations = props => {
     const apiKey = process.env.EXPO_PUBLIC_API_KEY;
     const apiToken = process.env.EXPO_PUBLIC_API_TOKEN;
     const getOrga = async ()=> {
-        const urlWorkspaces = `https://api.trello.com/1/members/me/organizations${props.endUrl}`;
+        const urlWorkspaces = `https://api.trello.com/1/members/me/organizations?${props.endUrl}`;
         const fetchRespOrga = await fetch(urlWorkspaces);
         const organizations = await fetchRespOrga.json();
         setDataWorkspace(await organizations);
     }
     useEffect(() => {
         getOrga();
-    }, []);
+    }, [props.formValid]);
     return (
         <>
             {dataWorkspace && dataWorkspace.map((workspace) => {

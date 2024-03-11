@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {ScrollView, Text} from "react-native";
+import {Button, Pressable, ScrollView, Text} from "react-native";
 
 const Organization = props => {
     //console.warn(props.organization)
@@ -8,7 +8,7 @@ const Organization = props => {
     const apiToken = process.env.EXPO_PUBLIC_API_TOKEN;
 
     const getBoardsOfOrga = async () =>{
-        let urlBoards = `https://api.trello.com/1/organizations/${props.organization.id}/boards${props.endUrl}`
+        let urlBoards = `https://api.trello.com/1/organizations/${props.organization.id}/boards?${props.endUrl}`
         const response = await fetch(urlBoards);
         const boards = await response.json();
         setDataBoards(boards)
@@ -20,7 +20,7 @@ const Organization = props => {
     }, []);
     return (
         <ScrollView>
-            <Text id={props.organization.id}> {props.organization.displayName}</Text>
+            <Button title={props.organization.displayName} id={props.organization.id} />
             {dataBoards && dataBoards.map((board) => {
                 return (
                     <Text id={board.id}>{board.name}</Text>
