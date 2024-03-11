@@ -3,6 +3,7 @@ import {Button, Pressable, ScrollView, StyleSheet, Text, TextInput, View} from '
 import React, {useEffect, useState} from "react";
 import {userService} from "../services/userService";
 import Organizations from "../component/Organizations";
+import StickyButton from "../component/StickyButton";
 
 export default function Workspaces() {
 
@@ -14,14 +15,6 @@ export default function Workspaces() {
     const [addWorkspaceName, setAddWorkspaceName] = useState('');
     const [formValid, setFormValid] = useState(false);
 
-    const styles = StyleSheet.create({
-        container: {
-            flex: 1,
-            backgroundColor: '#fff',
-            alignItems: 'center',
-            justifyContent: 'center',
-        },
-    });
     const getUser = async () => {
         setUser(await userService.getUser())
         // await getWorkspaces();
@@ -58,7 +51,11 @@ export default function Workspaces() {
         return user;
     }
     return (
-        <ScrollView>
+        <ScrollView contentContainerStyle={styles.container}
+                    contentInset={{ bottom: 150 }} // Customize the bottom inset
+                    contentOffset={{ y: -20 }}
+        >
+            <View style={styles.container}>
             <Text>Bonjour {user.username}</Text>
             <TextInput
                 placeholder="Enter workspace name"
@@ -66,6 +63,7 @@ export default function Workspaces() {
                 onChangeText={(text) => setAddWorkspaceName(text)}
             />
             <Button title="New Workspace" onPress={addOrga} />
+            </View>
             {
                 dataBoard ?
                     <Organizations endUrl={endUrl} formValid={formValid} />
@@ -77,3 +75,10 @@ export default function Workspaces() {
         </ScrollView>
     );
 }
+
+const styles = StyleSheet.create({
+    container: {
+        padding: 10,
+    },
+
+});
