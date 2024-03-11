@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   View,
   TouchableOpacity,
@@ -8,24 +8,49 @@ import {
   StyleSheet,
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
+import {useNavigation, useRoute} from '@react-navigation/native';
 
-const StickyButtonComponent = ({addList}) => {
+const StickyButtonComponent = (props) => {
   const [isModalVisible, setModalVisible] = useState(false);
-  const [addlistName, setAddListName] = useState('');
+  const [addName, setAddName] = useState('');
   const endUrl = `key=${process.env.EXPO_PUBLIC_API_KEY}&token=${process.env.EXPO_PUBLIC_API_TOKEN}`;
-
+  const route = useRoute()
+  const currentScreen = route.name;
+  let txtAdd = null;
+  switch (currentScreen) {
+    case "Random":
+      txtAdd = "Add an organization"
+      break;
+    case "Random2":
+      txtAdd = "Add a list"
+      break;
+    default:
+      break
+  }
   const openModal = () => {
     setModalVisible(true);
   };
-
   const closeModal = () => {
     setModalVisible(false);
   };
-
   const handleConfirm = () => {
-    addList(addlistName,endUrl);
+
+    switch (currentScreen) {
+      case "Random":
+        props.addOrga(addName)
+        txtAdd = "Add an organization"
+        break;
+      case "Random2":
+        props.addList(addName,endUrl);
+        txtAdd = "Add a list"
+        break;
+      default:
+        break
+    }
+
     closeModal();
   };
+
 
   return (
     <View style={styles.container}>
@@ -45,11 +70,11 @@ const StickyButtonComponent = ({addList}) => {
       >
         <View style={styles.modalContainer}>
           <View style={styles.modalContent}>
-            <Text style={styles.modalTitle}>Add a list</Text>
+            <Text style={styles.modalTitle}>{txtAdd}</Text>
             <TextInput
               style={styles.input}
               placeholder="Name"
-              onChangeText={(text) => setAddListName(text)}
+              onChangeText={(text) => setAddName(text)}
               // Add onChangeText and value props to handle input changes
             />
             <View style={styles.buttonContainer}>

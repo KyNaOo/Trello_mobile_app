@@ -4,6 +4,7 @@ import React, {useEffect, useState} from "react";
 import {userService} from "../services/userService";
 import Organizations from "../component/Organizations";
 import StickyButton from "../component/StickyButton";
+import StickyButtonComponent from "../component/StickyButton";
 
 export default function Workspaces() {
 
@@ -12,17 +13,17 @@ export default function Workspaces() {
     const endUrl = `key=${apiKey}&token=${apiToken}`
     const [user, setUser] = useState(null);
     const [dataBoard, setDataBoard] = useState([]);
-    const [addWorkspaceName, setAddWorkspaceName] = useState('');
+    // const [addWorkspaceName, setAddWorkspaceName] = useState('');
     const [formValid, setFormValid] = useState(false);
 
     const getUser = async () => {
         setUser(await userService.getUser())
         // await getWorkspaces();
     }
-    const addOrga = async () => {
+    const addOrga = async (orgaName) => {
         try {
             const response = await fetch(
-                `https://api.trello.com/1/organizations?displayName=${addWorkspaceName}&${endUrl}`,
+                `https://api.trello.com/1/organizations?displayName=${orgaName}&${endUrl}`,
                 {
                     method: 'POST',
                     headers: {
@@ -51,18 +52,21 @@ export default function Workspaces() {
         return user;
     }
     return (
+
         <ScrollView contentContainerStyle={styles.container}
                     contentInset={{ bottom: 150 }} // Customize the bottom inset
                     contentOffset={{ y: -20 }}
         >
+            <StickyButtonComponent addOrga={addOrga} endUrl={endUrl}/>
             <View style={styles.container}>
-            <Text>Bonjour {user.username}</Text>
-            <TextInput
-                placeholder="Enter workspace name"
-                value={addWorkspaceName}
-                onChangeText={(text) => setAddWorkspaceName(text)}
-            />
-            <Button title="New Workspace" onPress={addOrga} />
+            {/*<Text>Bonjour {user.username}</Text>*/}
+            {/*<TextInput*/}
+            {/*    placeholder="Enter workspace name"*/}
+            {/*    value={addWorkspaceName}*/}
+            {/*    onChangeText={(text) => setAddWorkspaceName(text)}*/}
+            {/*/>*/}
+
+            {/*<Button title="New Workspace" onPress={addOrga} />*/}
             </View>
             {
                 dataBoard ?
@@ -77,8 +81,6 @@ export default function Workspaces() {
 }
 
 const styles = StyleSheet.create({
-    container: {
-        padding: 10,
-    },
+
 
 });
