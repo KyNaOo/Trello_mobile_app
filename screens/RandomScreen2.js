@@ -7,13 +7,15 @@ import StickyButtonComponent from '../component/StickyButton';
 export default function RandomScreen2() {
   const [trelloData, setTrelloData] = useState([]);
   const [cardData,setCardData] = useState([]);
-  const [addlistName, setAddListName] = useState('');
+  const [formValid,setFormValid] = useState(false);
+  
+  
   const endUrl = `key=${process.env.EXPO_PUBLIC_API_KEY}&token=${process.env.EXPO_PUBLIC_API_TOKEN}`;
 
-    const addList = async () => {
+    const addList = async (listName,url) => {
       try {
         const response = await fetch(
-          `https://api.trello.com/1/lists?name=${addlistName}&idBoard=65e7225541349e9de197c3df&${endUrl}`,
+          `https://api.trello.com/1/lists?name=${listName}&idBoard=65e7225541349e9de197c3df&${url}`,
           {
             method: 'POST',
             headers: {
@@ -27,6 +29,8 @@ export default function RandomScreen2() {
   
         if (!response.ok) {
           console.error(`Error: ${response.status} ${response.statusText}`);
+        }else{
+          setFormValid(!formValid)
         }
       } catch (error) {
         console.error('Error making POST request:', error.message);
@@ -115,7 +119,7 @@ export default function RandomScreen2() {
     useEffect(() => {
       // Call the getAllList function when the component mounts
       getAllList();
-    }, []);
+    }, [formValid]);
 /*
     <TextInput
     placeholder="Enter List Name"
@@ -126,8 +130,8 @@ export default function RandomScreen2() {
   */
   return (
     <View>
+    <StickyButtonComponent addList={addList}/>
     <List listData={trelloData}/>
-    <StickyButtonComponent/>
   </View>
   )
 }
