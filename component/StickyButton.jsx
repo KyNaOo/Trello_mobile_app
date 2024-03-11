@@ -38,11 +38,9 @@ const StickyButtonComponent = (props) => {
     switch (currentScreen) {
       case "Random":
         props.addOrga(addName)
-        txtAdd = "Add an organization"
         break;
       case "Random2":
         props.addList(addName,endUrl);
-        txtAdd = "Add a list"
         break;
       default:
         break
