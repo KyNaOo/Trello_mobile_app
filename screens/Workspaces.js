@@ -45,6 +45,39 @@ export default function Workspaces() {
         }
     }
 
+    const updateOrga = async (idOrga, newName) => {
+        // console.warn(updateWorkspaceName)
+        let url = `https://api.trello.com/1/organizations/${idOrga}?displayName=${newName}&${endUrl}`
+        let response = await fetch(url,{
+            method: 'PUT'
+        });
+        console.warn("you are updating the name")
+        if (response.ok){
+            setFormValid(!formValid);
+        } else {
+            console.error(`Error: ${response.status} ${response.statusText}`);
+        }
+    }
+
+    const addBoard = async (idOrga, name) => {
+        const url = `https://api.trello.com/1/boards/?name=${name}&idOrganization=${idOrga}&${endUrl}`
+        const response = await fetch(url,
+            {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json',
+                },
+            }
+        )
+        if (response.ok){
+            setFormValid(!formValid)
+        } else {
+            console.warn("Error occurred when adding board");
+        }
+    }
+
+
     useEffect(() => {
         getUser();
     }, []);
@@ -61,7 +94,7 @@ export default function Workspaces() {
             <StickyButtonComponent addOrga={addOrga} endUrl={endUrl}/>
             {
                 dataBoard ?
-                    <Organizations endUrl={endUrl} formValid={formValid} />
+                    <Organizations endUrl={endUrl} formValid={formValid} update={updateOrga} add={addBoard}/>
 
                     :
                     <Text>Vous n'avez pas de tableau</Text>

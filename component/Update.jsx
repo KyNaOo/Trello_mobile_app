@@ -42,52 +42,35 @@ const Update = props => {
     }
 
     const handleConfirm = async () => {
-        switch (props.action) {
-            case 'Rename':
-                await update();
+        switch (currentScreen){
+            case 'Random':
+                switch (props.action) {
+                    case 'Rename':
+                        await props.update(props.id, actionName);
+                        break;
+                    case 'Add':
+                        await props.add(props.id, actionName);
+                        break;
+                    default:
+                        break;
+                }
                 break;
-            case 'Add':
-                await add();
+            case 'Random2':
+                switch (props.action) {
+                    case 'Rename':
+                        await props.update(props.id, actionName);
+                        break;
+                    case 'Add':
+                        await props.add(props.id, actionName);
+                        break;
+                    default:
+                        break;
+                }
                 break;
             default:
-                break;
+                break
         }
-    }
-
-    const update = async () => {
-        // console.warn(updateWorkspaceName)
-        let url = `https://api.trello.com/1/organizations/${props.organization}?displayName=${actionName}&${props.endUrl}`
-        let response = await fetch(url,{
-            method: 'PUT'
-        });
-        console.warn("you are updating the name")
-        if (response.ok){
-            setFormValid(!formValid);
-            props.getOrga()
-            props.setActionClicked(false);
-        } else {
-            console.error(`Error: ${response.status} ${response.statusText}`);
-        }
-    }
-
-    const add = async () => {
-        const url = `https://api.trello.com/1/boards/?name=${actionName}&idOrganization=${props.organization}&${props.endUrl}`
-        const response = await fetch(url,
-            {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Accept': 'application/json',
-                },
-            }
-        )
-        if (response.ok){
-            setFormValid(!formValid)
-            props.getOrga()
-            props.setActionClicked(false)
-        } else {
-            console.warn("Error occurred when adding board");
-        }
+        handleCloseModal();
     }
 
     const handleCloseModal = () => {
@@ -95,8 +78,9 @@ const Update = props => {
     }
 
     useEffect(() => {
-        props.getOrga()
-        props.getBoards()
+
+        // props.getOrga()
+        // props.getBoards()
         loadTxt();
     }, [formValid]);
 
@@ -106,7 +90,6 @@ const Update = props => {
                 animationType={"fade"}
                 transparent={true}
                 visible={props.actionClicked}
-
             >
                 <View style={styles.modalContainer}>
                     <View style={styles.modalContent}>
@@ -154,12 +137,14 @@ const styles = StyleSheet.create({
         padding: 20,
         borderRadius: 10,
         elevation: 5,
+        width: '80%',
     },
     inputField: {
         height: 40,
         borderColor: 'gray',
         borderWidth: 1,
         marginBottom: 10,
+        marginTop: 5,
         paddingHorizontal: 10,
         width: '100%',
     },

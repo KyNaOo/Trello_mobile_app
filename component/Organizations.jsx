@@ -20,7 +20,7 @@ const Organizations = props => {
             {dataWorkspace && dataWorkspace.map((workspace) => {
                 return(
                     <View>
-                    <Organization organization={workspace} endUrl={props.endUrl} formValid={props.formValid} getOrga={getOrga} />
+                    <Organization organization={workspace} endUrl={props.endUrl} formValid={props.formValid} getOrga={getOrga} update={props.update} add={props.add}/>
                     </View>
                 )
             })}

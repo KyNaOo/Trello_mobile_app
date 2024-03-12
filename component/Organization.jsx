@@ -46,7 +46,7 @@ const Organization = props => {
         <View style={styles.container} key={props.organization.id}>
             <View style={styles.headerContainer}>
             <Text style={styles.orgaName}>{props.organization.displayName}</Text>
-            <Edit id={props.organization.id} delete={deleteOrga} getOrga={props.getOrga} endUrl={props.endUrl} getBoards={getBoardsOfOrga}/>
+            <Edit id={props.organization.id} delete={deleteOrga} getOrga={props.getOrga} endUrl={props.endUrl} getBoards={getBoardsOfOrga} update={props.update} add={props.add}/>
             {/*<Update endUrl={props.endUrl} organization={props.organization} getOrga={props.getOrga}></Update>*/}
             </View>
                 {dataBoards && dataBoards.map((board) => {

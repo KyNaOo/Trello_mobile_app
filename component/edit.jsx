@@ -9,30 +9,10 @@ const Edit = props => {
   const [isModalVisible, setModalVisible] = useState(false);
   const [textInputValue, setTextInputValue] = useState('');
 
-  const handleOptionSelect = (value) => {
-
-    if (value === 'Option 1') {
-      setModalVisible(true);
-    }
-    if (value === 'Option 2') {
-      // Handle Option 2
-      props.deleteList(props.listId);
-    }
-    if(value == 'Option 3'){
-      props.deleteCard()
-    }
-  };
-
   const closeModal = () => {
     setModalVisible(false);
   };
 
-  const handleConfirm = () => {
-    // Handle confirmation, e.g., update the list name with the input value
-    props.updateList(props.listId,textInputValue);
-    setModalVisible(false);
-  };
-  const [selectedOption, setSelectedOption] = useState('');
   const [actionClicked, setActionClicked] = useState(false)
   const [action, setAction] = useState('')
   const route = useRoute()
@@ -60,7 +40,7 @@ const Edit = props => {
             setActionClicked(true)
             setAction('Rename')
           }} text="Rename" />
-          <MenuOption onSelect={() => props.delete()} text="Delete" />
+          <MenuOption onSelect={() => props.delete(props.id)} text="Delete" />
           <MenuOption onSelect={() => {
             setActionClicked(true)
             setAction('Add')
@@ -68,40 +48,22 @@ const Edit = props => {
         </MenuOptions>
       </Menu>
 
-      <Modal
-        visible={isModalVisible}
-        animationType="fade"
-        transparent={true}
-        onRequestClose={closeModal}
-      >
-        <View style={styles.modalContainer}>
-          <View style={styles.modalContent}>
-            <Text style={styles.modalTitle}>Rename</Text>
-            <TextInput
-                style={styles.input}
-                placeholder="Name"
-                onChangeText={(text) => setTextInputValue(text)}
-            />
-            <View style={styles.buttonContainer}>
-              <TouchableOpacity
-                style={[styles.button, styles.confirmButton]}
-                onPress={handleConfirm}
-              >
-                <Text style={styles.buttonText}>Confirm</Text>
-              </TouchableOpacity>
-              <TouchableOpacity
-                style={[styles.button, styles.cancelButton]}
-                onPress={closeModal}
-              >
-                <Text style={styles.buttonText}>Cancel</Text>
-              </TouchableOpacity>
-            </View>
-          </View>
-        </View>
-      </Modal>
-
       {
-        actionClicked && <Update action={action} endUrl={props.endUrl} organization={props.id} modal={actionClicked} getOrga={props.getOrga} setActionClicked={setActionClicked} getBoards={props.getBoards} actionClicked={actionClicked}/>
+        actionClicked && <Update
+              action={action}
+              endUrl={props.endUrl}
+
+              actionClicked={actionClicked}
+              setActionClicked={setActionClicked}
+              modal={actionClicked}
+
+              getOrga={props.getOrga}
+              getBoards={props.getBoards}
+              update={props.update}
+              add={props.add}
+              id={props.id}
+
+          />
       }
 
     </View>
