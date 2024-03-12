@@ -4,7 +4,7 @@ import TopBar from "./component/TopBar";
 import {NavigationContainer} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import HomeScreen from './screens/HomeScreen';
-import RandomScreen from './screens/RandomScreen';
+import Workspaces from './screens/Workspaces';
 import RandomScreen2 from './screens/RandomScreen2';
 import RandomScreen3 from './screens/RandomScreen3';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
@@ -64,11 +64,13 @@ const tabScreenOptions = (iconLibrary, iconName, Name) => ({
     ),
 });
 export default function App() {
+  const apiKey = process.env.EXPO_PUBLIC_API_KEY;
+  const apiToken = process.env.EXPO_PUBLIC_API_TOKEN;
     const [user, setUser] = useState(null)
     const getUser = async () => {
         setUser(await userService.getUser())
     }
-    const endUrl = `?key=${process.env.EXPO_PUBLIC_API_KEY}&token=${process.env.EXPO_PUBLIC_API_TOKEN}`
+    const endUrl = `?key=${apiKey}&token=${apiToken}`
     useEffect( () => {
         const fetchMe = async () => {
             const response = await fetch(`https://api.trello.com/1/members/me/${endUrl}`);
@@ -79,7 +81,7 @@ export default function App() {
             }
         }
         if (user === null) {
-            fetchMe()
+            fetchMe();
         }
     }, []);
 
@@ -89,10 +91,12 @@ export default function App() {
             <MenuProvider>
             <NavigationContainer>
                 <Tab.Navigator screenOptions={screenOptions}>
+
                 <Tab.Screen name="Home" component={HomeScreen} options={tabScreenOptions('Entypo', 'home','Home')} />
-                <Tab.Screen name="Random" component={RandomScreen} options={tabScreenOptions('Entypo', 'blackboard','Board')} />
+                <Tab.Screen name="Random" component={Workspaces} options={tabScreenOptions('Entypo', 'blackboard','Board')} />
                 <Tab.Screen name="Random2" component={RandomScreen2} options={tabScreenOptions('Ionicons', 'settings', 'Settings')} />
                 <Tab.Screen name="Random3" component={RandomScreen3} options={tabScreenOptions('Ionicons', 'person', 'Profile')} />
+
                 </Tab.Navigator>
             </NavigationContainer>
             </MenuProvider>
