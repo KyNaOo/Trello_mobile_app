@@ -2,26 +2,23 @@ import React from 'react';
 import { View, Text, StyleSheet, ScrollView } from 'react-native';
 import Edit from './edit';
 
-const List = ({ listData, closeList }) => {
-  const handleEditPress = (listId) => {
-    // Handle edit press for the specific list with listId
-    console.log(`Edit pressed for list with ID: ${listId}`);
-  };
+const List = props => {
   return (
     <ScrollView
       contentContainerStyle={styles.container}
       contentInset={{ bottom: 150 }}
       contentOffset={{ y: -20 }}
     >
-      {listData.map((list) => (
+      {props.listData.map((list) => (
         <View style={styles.card} key={list.id}>
           <View style={styles.headerContainer}>
             <Text style={styles.cardTitle}>{list.name}</Text>
-            <Edit listId={list.id} deleteList={closeList} />
+            <Edit listId={list.id} deleteList={props.deleteList} updateList={props.updateList} createCard={props.createCard} updateCard={props.updateCard} deleteCard={props.deleteCard}/>
           </View>
           <View style={styles.cardContent}>
             {list.cards.map((card) => (
               <View style={styles.card} key={card.id}>
+                <Text>{card.id}</Text>
                 <Text style={styles.cardTitle}>{card.name}</Text>
                 {/* Additional properties you want to display for the card */}
               </View>
@@ -29,7 +26,7 @@ const List = ({ listData, closeList }) => {
           </View>
         </View>
       ))}
-      {listData.length > 5 && (
+      {props.listData.length > 5 && (
         <View style={styles.lastcard}>
           <Text style={styles.cardTitle}></Text>
         </View>

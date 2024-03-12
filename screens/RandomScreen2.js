@@ -9,9 +9,11 @@ export default function RandomScreen2() {
   const [cardData,setCardData] = useState([]);
   const [formValid,setFormValid] = useState(false);
   
-  
+  const listId='65e726491d55e6bbea104144'
+  const cardId='65f05dcdec1a8382c6b57c41'
   const endUrl = `key=${process.env.EXPO_PUBLIC_API_KEY}&token=${process.env.EXPO_PUBLIC_API_TOKEN}`;
 
+    //CRUD for List
     const addList = async (listName,url) => {
       try {
         const response = await fetch(
@@ -56,39 +58,9 @@ export default function RandomScreen2() {
       }
     };
 
-    const updateList = async () => {
+    const updateList = async (id,newName) => {
       try {
         // Replace 'listId' with the actual ID of the list you want to update
-        const listId = '65e72656763aa5dfd17518e6';
-  
-        const response = await fetch(
-          `https://api.trello.com/1/lists/${listId}?${endUrl}`,
-          {
-            method: 'PUT',
-            headers: {
-              'Content-Type': 'application/json',
-              'Accept': 'application/json',
-            },
-            body: JSON.stringify({
-              name: 'damn', // New name for the list
-              closed:false
-            }),
-          }
-        );
-        if (!response.ok) {
-          console.error(`Error: ${response.status} ${response.statusText}`);
-          return;
-        }
-        const updatedList = await response.json();
-        console.warn(updatedList);
-      } catch (error) {
-        console.error('Error making PUT request:', error.message);
-      }
-    };
-
-    const closeList = async (id) => {
-      try {
-        // Replace 'listId' with the actual ID of the list you want to updat
   
         const response = await fetch(
           `https://api.trello.com/1/lists/${id}?${endUrl}`,
@@ -99,7 +71,34 @@ export default function RandomScreen2() {
               'Accept': 'application/json',
             },
             body: JSON.stringify({
-              name: 'damn', // New name for the list
+              name: `${newName}`, // New name for the list
+              closed:false
+            }),
+          }
+        );
+        if (!response.ok) {
+          console.error(`Error: ${response.status} ${response.statusText}`);
+          return;
+        }else{
+          setFormValid(!formValid)
+        }
+        
+      } catch (error) {
+        console.error('Error making PUT request:', error.message);
+      }
+    };
+
+    const closeList = async (id) => {
+      try {
+        const response = await fetch(
+          `https://api.trello.com/1/lists/${id}?${endUrl}`,
+          {
+            method: 'PUT',
+            headers: {
+              'Content-Type': 'application/json',
+              'Accept': 'application/json',
+            },
+            body: JSON.stringify({
               closed:true
             }),
           }
@@ -110,8 +109,87 @@ export default function RandomScreen2() {
         }else{
           setFormValid(!formValid)
         }
-        const updatedList = await response.json();
-        console.warn(updatedList);
+      } catch (error) {
+        console.error('Error making PUT request:', error.message);
+      }
+    };
+    //
+    //
+    //
+    //CRUD for cards
+    const createCard = async (id,cardName) => {
+      try {
+        const response = await fetch(
+          `https://api.trello.com/1/cards?idList=${id}&${endUrl}`,
+          {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              'Accept': 'application/json',
+            },
+            body: JSON.stringify({
+              name:`${cardName}`,
+              closed:true
+            }),
+          }
+        );
+        if (!response.ok) {
+          console.error(`Error: ${response.status} ${response.statusText}`);
+          return;
+        }else{
+          setFormValid(!formValid)
+        }
+      } catch (error) {
+        console.error('Error making POST request:', error.message);
+      }
+    };
+
+    const updateCard = async (id,cardName) => {
+      try {
+        const response = await fetch(
+          `https://api.trello.com/1/cards/${id}?${endUrl}`,
+          {
+            method: 'PUT',
+            headers: {
+              'Content-Type': 'application/json',
+              'Accept': 'application/json',
+            },
+            body: JSON.stringify({
+              name: `${cardName}`, // New name for the list
+              closed:false
+            }),
+          }
+        );
+        if (!response.ok) {
+          console.error(`Error: ${response.status} ${response.statusText}`);
+          return;
+        }else{
+          setFormValid(!formValid)
+        }
+        
+      } catch (error) {
+        console.error('Error making PUT request:', error.message);
+      }
+    };
+
+    const closeCard = async () => {
+      try {
+        const response = await fetch(
+          `https://api.trello.com/1/cards/${cardId}?${endUrl}`,
+          {
+            method: 'DELETE',
+            headers: {
+              'Content-Type': 'application/json',
+              'Accept': 'application/json',
+            }
+          }
+        );
+        if (!response.ok) {
+          console.error(`Error: ${response.status} ${response.statusText}`);
+          return;
+        }else{
+          setFormValid(!formValid)
+        }
       } catch (error) {
         console.error('Error making PUT request:', error.message);
       }
@@ -121,18 +199,11 @@ export default function RandomScreen2() {
       // Call the getAllList function when the component mounts
       getAllList();
     }, [formValid]);
-/*
-    <TextInput
-    placeholder="Enter List Name"
-    value={addlistName}
-    onChangeText={(text) => setAddListName(text)}
-  />
-  <Button title="New list" onPress={addList} />
-  */
+    
   return (
     <View>
     <StickyButtonComponent addList={addList}/>
-    <List listData={trelloData} deleteList={closeList}/>
+    <List listData={trelloData} deleteList={closeList} updateList={updateList} createCard={createCard} updateCard={updateCard} deleteCard={closeCard} />
   </View>
   )
 }
