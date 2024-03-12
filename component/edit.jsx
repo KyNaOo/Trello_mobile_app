@@ -23,15 +23,6 @@ const Edit = props => {
     default:
       break;
   }
-  const handleOptionSelect = (value) => {
-    setSelectedOption(value);
-    // Handle the selected option as needed
-    console.log('Selected option:', value);
-    // if(value === "Option 2"){
-    //     deleteList(listId);
-    // }
-  };
-
 
   return (
     <View style={styles.container}>

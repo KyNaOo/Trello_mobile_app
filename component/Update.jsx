@@ -1,11 +1,45 @@
 import React, {useEffect, useState} from 'react';
 import {View, Button, Modal, StyleSheet, Text, TextInput, TouchableOpacity} from 'react-native';
+import {useRoute} from "@react-navigation/native";
 
 
 const Update = props => {
-    const [modalVisible, setModalVisible] = useState(false);
     const [actionName, setActionName] = useState('');
     const [formValid, setFormValid] = useState(false)
+    const [askLbl, setAskLbl] = useState('')
+
+    const route = useRoute()
+    const currentScreen = route.name;
+    const loadTxt = () => {
+        switch (currentScreen) {
+            case 'Random':
+                switch (props.action){
+                    case 'Rename':
+                        setAskLbl('Rename your organization :');
+                        break;
+                    case 'Add':
+                        setAskLbl('Add a new board :');
+                        break;
+                    default:
+                        break;
+                }
+                break;
+            case 'Random2':
+                switch (props.action){
+                    case 'Rename':
+                        setAskLbl('Rename your list :');
+                        break;
+                    case 'Add':
+                        setAskLbl('Add a card :');
+                        break;
+                    default:
+                        break;
+                }
+                break;
+            default:
+                break;
+        }
+    }
 
     const handleConfirm = async () => {
         switch (props.action) {
@@ -20,9 +54,6 @@ const Update = props => {
         }
     }
 
-    useEffect(() => {
-        setModalVisible(props.modal)
-    }, [props.modal]);
     const update = async () => {
         // console.warn(updateWorkspaceName)
         let url = `https://api.trello.com/1/organizations/${props.organization}?displayName=${actionName}&${props.endUrl}`
@@ -50,8 +81,6 @@ const Update = props => {
                 },
             }
         )
-        console.warn("you are adding a board")
-        console.warn(response.status)
         if (response.ok){
             setFormValid(!formValid)
             props.getOrga()
@@ -68,6 +97,7 @@ const Update = props => {
     useEffect(() => {
         props.getOrga()
         props.getBoards()
+        loadTxt();
     }, [formValid]);
 
     return (
@@ -76,13 +106,11 @@ const Update = props => {
                 animationType={"fade"}
                 transparent={true}
                 visible={props.actionClicked}
-                onRequestClose={() => {
-                    setModalVisible(false);
-                }}
+
             >
                 <View style={styles.modalContainer}>
                     <View style={styles.modalContent}>
-                        <Text>Changer le nom de l'organisation :</Text>
+                        <Text>{askLbl}</Text>
                         <TextInput
                             style={styles.inputField}
                             placeholder="Nouveau nom du workspace"
