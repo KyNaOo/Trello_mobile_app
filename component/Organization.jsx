@@ -1,13 +1,16 @@
 import React, {useEffect, useState} from 'react';
-import {Button, Pressable, ScrollView, StyleSheet, Text, View} from "react-native";
+import {Button, Pressable, ScrollView, StyleSheet, Text, TouchableOpacity, View} from "react-native";
 import Update from "./Update";
 import Edit from "./edit";
+import {useNavigation} from "@react-navigation/native";
 
 const Organization = props => {
     //console.warn(props.organization)
     const [dataBoards, setDataBoards] = useState([]);
     const [deleteState, setDeleteState] = useState(false)
-    const [addBoard, setAddBoard] = useState(false)
+    const navigation = useNavigation();
+    const [boardSelect, setBoardSelect] = useState(undefined)
+
 
     const getBoardsOfOrga = async () =>{
         let urlBoards = `https://api.trello.com/1/organizations/${props.organization.id}/boards?${props.endUrl}`
@@ -37,6 +40,10 @@ const Organization = props => {
         }
     }
 
+    const openBoardScreen = (board) => {
+        navigation.navigate('Random2', {board: board})
+    }
+
     useEffect(() => {
         getBoardsOfOrga()
         props.getOrga()
@@ -47,13 +54,12 @@ const Organization = props => {
             <View style={styles.headerContainer}>
             <Text style={styles.orgaName}>{props.organization.displayName}</Text>
             <Edit id={props.organization.id} delete={deleteOrga} getOrga={props.getOrga} endUrl={props.endUrl} getBoards={getBoardsOfOrga} update={props.update} add={props.add}/>
-            {/*<Update endUrl={props.endUrl} organization={props.organization} getOrga={props.getOrga}></Update>*/}
             </View>
                 {dataBoards && dataBoards.map((board) => {
                     return (
-                        <View style={styles.containerBoard}>
+                        <TouchableOpacity style={styles.containerBoard} onPress={() => openBoardScreen(board)}>
                             <Text id={board.id} >{board.name}</Text>
-                        </View>
+                        </TouchableOpacity>
                     );
                 })}
         </View>

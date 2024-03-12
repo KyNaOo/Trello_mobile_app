@@ -4,11 +4,12 @@ import { useEffect, useState } from 'react';
 import List from '../component/List';
 import StickyButtonComponent from '../component/StickyButton';
 
-export default function RandomScreen2() {
+export default function RandomScreen2({route}) {
   const [trelloData, setTrelloData] = useState([]);
   const [cardData,setCardData] = useState([]);
   const [formValid,setFormValid] = useState(false);
-  
+  const {board} = route.params;
+
   const listId='65e726491d55e6bbea104144'
   const cardId='65f05dcdec1a8382c6b57c41'
   const endUrl = `key=${process.env.EXPO_PUBLIC_API_KEY}&token=${process.env.EXPO_PUBLIC_API_TOKEN}`;
@@ -17,7 +18,7 @@ export default function RandomScreen2() {
     const addList = async (listName,url) => {
       try {
         const response = await fetch(
-          `https://api.trello.com/1/lists?name=${listName}&idBoard=65e7225541349e9de197c3df&${url}`,
+          `https://api.trello.com/1/lists?name=${listName}&idBoard=${board.id}&${url}`,
           {
             method: 'POST',
             headers: {
@@ -42,7 +43,7 @@ export default function RandomScreen2() {
     const getAllList = async () => {
       try {
         const response = await fetch(
-          `https://api.trello.com/1/boards/65e7225541349e9de197c3df/lists?${endUrl}&cards=all`
+          `https://api.trello.com/1/boards/${board.id}/lists?${endUrl}&cards=all`
         );
   
         if (!response.ok) {
@@ -198,7 +199,7 @@ export default function RandomScreen2() {
     useEffect(() => {
       // Call the getAllList function when the component mounts
       getAllList();
-    }, [formValid]);
+    }, [formValid, board]);
     
   return (
     <View>
