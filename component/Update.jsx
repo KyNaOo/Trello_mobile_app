@@ -4,38 +4,78 @@ import {View, Button, Modal, StyleSheet, Text, TextInput, TouchableOpacity} from
 
 const Update = props => {
     const [modalVisible, setModalVisible] = useState(false);
-    const [updateWorkspaceName, setUpdateWorkspaceName] = useState('');
+    const [actionName, setActionName] = useState('');
     const [formValid, setFormValid] = useState(false)
 
     const handleConfirm = async () => {
+        switch (props.action) {
+            case 'Rename':
+                await update();
+                break;
+            case 'Add':
+                await add();
+                break;
+            default:
+                break;
+        }
+    }
+
+    useEffect(() => {
+        setModalVisible(props.modal)
+    }, [props.modal]);
+    const update = async () => {
         // console.warn(updateWorkspaceName)
-        let url = `https://api.trello.com/1/organizations/${props.organization.id}?displayName=${updateWorkspaceName}&${props.endUrl}`
+        let url = `https://api.trello.com/1/organizations/${props.organization}?displayName=${actionName}&${props.endUrl}`
         let response = await fetch(url,{
             method: 'PUT'
         });
+        console.warn("you are updating the name")
         if (response.ok){
             setFormValid(!formValid);
             props.getOrga()
-            setModalVisible(false)
+            props.setActionClicked(false);
         } else {
             console.error(`Error: ${response.status} ${response.statusText}`);
         }
     }
 
+    const add = async () => {
+        const url = `https://api.trello.com/1/boards/?name=${actionName}&idOrganization=${props.organization}&${props.endUrl}`
+        const response = await fetch(url,
+            {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json',
+                },
+            }
+        )
+        console.warn("you are adding a board")
+        console.warn(response.status)
+        if (response.ok){
+            setFormValid(!formValid)
+            props.getOrga()
+            props.setActionClicked(false)
+        } else {
+            console.warn("Error occurred when adding board");
+        }
+    }
+
+    const handleCloseModal = () => {
+        props.setActionClicked(false)
+    }
+
     useEffect(() => {
         props.getOrga()
-    }, []);
+        props.getBoards()
+    }, [formValid]);
 
     return (
         <View style={styles.container}>
-            <Button
-                title="Ouvrir le modal"
-                onPress={() => setModalVisible(true)}
-            />
             <Modal
                 animationType={"fade"}
                 transparent={true}
-                visible={modalVisible}
+                visible={props.actionClicked}
                 onRequestClose={() => {
                     setModalVisible(false);
                 }}
@@ -47,7 +87,7 @@ const Update = props => {
                             style={styles.inputField}
                             placeholder="Nouveau nom du workspace"
                             // value={updateWorkspaceName}
-                            onChangeText={(text) => setUpdateWorkspaceName(text)}
+                            onChangeText={(text) => setActionName(text)}
                         />
                         <View style={styles.buttonContainer}>
                         <TouchableOpacity
@@ -58,7 +98,7 @@ const Update = props => {
                         </TouchableOpacity>
                         <TouchableOpacity
                             style={[styles.button, styles.cancelButton]}
-                            onPress={() => setModalVisible(false)}
+                            onPress={() => handleCloseModal()}
                         >
                             <Text style={styles.buttonText}>Cancel</Text>
                         </TouchableOpacity>
