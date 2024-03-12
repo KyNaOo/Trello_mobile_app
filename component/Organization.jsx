@@ -1,10 +1,13 @@
 import React, {useEffect, useState} from 'react';
 import {Button, Pressable, ScrollView, StyleSheet, Text, View} from "react-native";
 import Update from "./Update";
+import Edit from "./edit";
 
 const Organization = props => {
     //console.warn(props.organization)
     const [dataBoards, setDataBoards] = useState([]);
+    const [deleteState, setDeleteState] = useState(false)
+    const [addBoard, setAddBoard] = useState(false)
 
     const getBoardsOfOrga = async () =>{
         let urlBoards = `https://api.trello.com/1/organizations/${props.organization.id}/boards?${props.endUrl}`
@@ -14,14 +17,38 @@ const Organization = props => {
         // console.warn(dataBoards)
     }
 
+    const deleteOrga = async () => {
+        const url = `https://api.trello.com/1/organizations/${props.organization.id}?${props.endUrl}`
+        const response = await fetch(url,
+            {
+                method: 'DELETE',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json',
+                },
+                // Add any additional headers or body data as needed
+                // body: JSON.stringify({ key: 'value' }),
+            }
+            )
+        if (response.ok){
+            setDeleteState(!deleteState);
+        } else {
+            console.warn("Error with the delete function")
+        }
+    }
+
     useEffect(() => {
         getBoardsOfOrga()
-    }, [props.formValid]);
+        props.getOrga()
+    }, [props.formValid, deleteState]);
+
     return (
         <View style={styles.container} key={props.organization.id}>
+            <View style={styles.headerContainer}>
             <Text style={styles.orgaName}>{props.organization.displayName}</Text>
-            <Update endUrl={props.endUrl} organization={props.organization} getOrga={props.getOrga}></Update>
-
+            <Edit id={props.organization.id} delete={deleteOrga} getOrga={props.getOrga} endUrl={props.endUrl} getBoards={getBoardsOfOrga}/>
+            {/*<Update endUrl={props.endUrl} organization={props.organization} getOrga={props.getOrga}></Update>*/}
+            </View>
                 {dataBoards && dataBoards.map((board) => {
                     return (
                         <View style={styles.containerBoard}>
@@ -57,6 +84,10 @@ const styles = StyleSheet.create({
         fontSize: 18,
         fontWeight: 'bold',
         marginBottom: 10,
+    },
+    headerContainer: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
     },
 });
 

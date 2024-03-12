@@ -44,6 +44,7 @@ export default function Workspaces() {
             console.error('Error making POST request:', error.message);
         }
     }
+
     useEffect(() => {
         getUser();
     }, []);
@@ -58,16 +59,6 @@ export default function Workspaces() {
                     contentOffset={{ y: -20 }}
         >
             <StickyButtonComponent addOrga={addOrga} endUrl={endUrl}/>
-            <View style={styles.container}>
-            {/*<Text>Bonjour {user.username}</Text>*/}
-            {/*<TextInput*/}
-            {/*    placeholder="Enter workspace name"*/}
-            {/*    value={addWorkspaceName}*/}
-            {/*    onChangeText={(text) => setAddWorkspaceName(text)}*/}
-            {/*/>*/}
-
-            {/*<Button title="New Workspace" onPress={addOrga} />*/}
-            </View>
             {
                 dataBoard ?
                     <Organizations endUrl={endUrl} formValid={formValid} />

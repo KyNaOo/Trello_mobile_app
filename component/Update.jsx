@@ -1,53 +1,121 @@
 import React, {useEffect, useState} from 'react';
 import {View, Button, Modal, StyleSheet, Text, TextInput, TouchableOpacity} from 'react-native';
+import {useRoute} from "@react-navigation/native";
 
 
 const Update = props => {
-    const [modalVisible, setModalVisible] = useState(false);
-    const [updateWorkspaceName, setUpdateWorkspaceName] = useState('');
+    const [actionName, setActionName] = useState('');
     const [formValid, setFormValid] = useState(false)
+    const [askLbl, setAskLbl] = useState('')
+
+    const route = useRoute()
+    const currentScreen = route.name;
+    const loadTxt = () => {
+        switch (currentScreen) {
+            case 'Random':
+                switch (props.action){
+                    case 'Rename':
+                        setAskLbl('Rename your organization :');
+                        break;
+                    case 'Add':
+                        setAskLbl('Add a new board :');
+                        break;
+                    default:
+                        break;
+                }
+                break;
+            case 'Random2':
+                switch (props.action){
+                    case 'Rename':
+                        setAskLbl('Rename your list :');
+                        break;
+                    case 'Add':
+                        setAskLbl('Add a card :');
+                        break;
+                    default:
+                        break;
+                }
+                break;
+            default:
+                break;
+        }
+    }
 
     const handleConfirm = async () => {
+        switch (props.action) {
+            case 'Rename':
+                await update();
+                break;
+            case 'Add':
+                await add();
+                break;
+            default:
+                break;
+        }
+    }
+
+    const update = async () => {
         // console.warn(updateWorkspaceName)
-        let url = `https://api.trello.com/1/organizations/${props.organization.id}?displayName=${updateWorkspaceName}&${props.endUrl}`
+        let url = `https://api.trello.com/1/organizations/${props.organization}?displayName=${actionName}&${props.endUrl}`
         let response = await fetch(url,{
             method: 'PUT'
         });
+        console.warn("you are updating the name")
         if (response.ok){
             setFormValid(!formValid);
             props.getOrga()
-            setModalVisible(false)
+            props.setActionClicked(false);
         } else {
             console.error(`Error: ${response.status} ${response.statusText}`);
         }
     }
 
+    const add = async () => {
+        const url = `https://api.trello.com/1/boards/?name=${actionName}&idOrganization=${props.organization}&${props.endUrl}`
+        const response = await fetch(url,
+            {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json',
+                },
+            }
+        )
+        if (response.ok){
+            setFormValid(!formValid)
+            props.getOrga()
+            props.setActionClicked(false)
+        } else {
+            console.warn("Error occurred when adding board");
+        }
+    }
+
+    const handleCloseModal = () => {
+        props.setActionClicked(false)
+    }
+
     useEffect(() => {
         props.getOrga()
-    }, []);
+        props.getBoards()
+        loadTxt();
+    }, [formValid]);
 
     return (
         <View style={styles.container}>
-            <Button
-                title="Ouvrir le modal"
-                onPress={() => setModalVisible(true)}
-            />
             <Modal
                 animationType={"fade"}
                 transparent={true}
-                visible={modalVisible}
-                onRequestClose={() => {
-                    setModalVisible(false);
-                }}
+                visible={props.actionClicked}
+
             >
                 <View style={styles.modalContainer}>
                     <View style={styles.modalContent}>
-                        <Text>Changer le nom de l'organisation :</Text>
+                        <Text>{askLbl}</Text>
                         <TextInput
                             style={styles.inputField}
                             placeholder="Nouveau nom du workspace"
                             // value={updateWorkspaceName}
-                            onChangeText={(text) => setUpdateWorkspaceName(text)}
+                            onChangeText={(text) => setActionName(text)}
                         />
                         <View style={styles.buttonContainer}>
                         <TouchableOpacity
@@ -58,7 +126,7 @@ const Update = props => {
                         </TouchableOpacity>
                         <TouchableOpacity
                             style={[styles.button, styles.cancelButton]}
-                            onPress={() => setModalVisible(false)}
+                            onPress={() => handleCloseModal()}
                         >
                             <Text style={styles.buttonText}>Cancel</Text>
                         </TouchableOpacity>
