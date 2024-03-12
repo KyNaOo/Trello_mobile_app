@@ -86,13 +86,12 @@ export default function RandomScreen2() {
       }
     };
 
-    const closeList = async () => {
+    const closeList = async (id) => {
       try {
-        // Replace 'listId' with the actual ID of the list you want to update
-        const listId = '65e72656763aa5dfd17518e6';
+        // Replace 'listId' with the actual ID of the list you want to updat
   
         const response = await fetch(
-          `https://api.trello.com/1/lists/${listId}?${endUrl}`,
+          `https://api.trello.com/1/lists/${id}?${endUrl}`,
           {
             method: 'PUT',
             headers: {
@@ -108,6 +107,8 @@ export default function RandomScreen2() {
         if (!response.ok) {
           console.error(`Error: ${response.status} ${response.statusText}`);
           return;
+        }else{
+          setFormValid(!formValid)
         }
         const updatedList = await response.json();
         console.warn(updatedList);
@@ -131,7 +132,7 @@ export default function RandomScreen2() {
   return (
     <View>
     <StickyButtonComponent addList={addList}/>
-    <List listData={trelloData}/>
+    <List listData={trelloData} deleteList={closeList}/>
   </View>
   )
 }

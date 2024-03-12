@@ -1,16 +1,24 @@
 import React from 'react';
 import { View, Text, StyleSheet, ScrollView } from 'react-native';
-import edit from './edit';
+import Edit from './edit';
 
-const List = ({ listData }) => {
+const List = ({ listData, closeList }) => {
+  const handleEditPress = (listId) => {
+    // Handle edit press for the specific list with listId
+    console.log(`Edit pressed for list with ID: ${listId}`);
+  };
   return (
-    <ScrollView contentContainerStyle={styles.container}
-    contentInset={{ bottom: 150 }} // Customize the bottom inset
-    contentOffset={{ y: -20 }}   // Customize the initial scroll position
+    <ScrollView
+      contentContainerStyle={styles.container}
+      contentInset={{ bottom: 150 }}
+      contentOffset={{ y: -20 }}
     >
       {listData.map((list) => (
         <View style={styles.card} key={list.id}>
-          <Text style={styles.cardTitle}>{list.name}</Text>
+          <View style={styles.headerContainer}>
+            <Text style={styles.cardTitle}>{list.name}</Text>
+            <Edit listId={list.id} deleteList={closeList} />
+          </View>
           <View style={styles.cardContent}>
             {list.cards.map((card) => (
               <View style={styles.card} key={card.id}>
@@ -21,7 +29,7 @@ const List = ({ listData }) => {
           </View>
         </View>
       ))}
-     {listData.length > 5 && (
+      {listData.length > 5 && (
         <View style={styles.lastcard}>
           <Text style={styles.cardTitle}></Text>
         </View>
@@ -40,6 +48,11 @@ const styles = StyleSheet.create({
     elevation: 3,
     marginVertical: 10,
     padding: 15,
+  },
+  headerContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
   },
   cardTitle: {
     fontSize: 18,

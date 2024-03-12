@@ -13,6 +13,7 @@ import {userService} from "./services/userService";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { Entypo } from '@expo/vector-icons';
 import { Ionicons } from '@expo/vector-icons';
+import { MenuProvider } from 'react-native-popup-menu';
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -20,7 +21,7 @@ const screenOptions = {
     tabBarShowLabel: false,
     headerShown: false,
     tabBarStyle: {
-        position: "absolute",
+        position: "fixed",
         bottom: 0,
         right: 0,
         left: 0,
@@ -85,6 +86,7 @@ export default function App() {
     return (
         <>
             <TopBar/>
+            <MenuProvider>
             <NavigationContainer>
                 <Tab.Navigator screenOptions={screenOptions}>
                 <Tab.Screen name="Home" component={HomeScreen} options={tabScreenOptions('Entypo', 'home','Home')} />
@@ -93,6 +95,8 @@ export default function App() {
                 <Tab.Screen name="Random3" component={RandomScreen3} options={tabScreenOptions('Ionicons', 'person', 'Profile')} />
                 </Tab.Navigator>
             </NavigationContainer>
+            </MenuProvider>
+         
             <StatusBar style={"light"}/>
         </>
     );
