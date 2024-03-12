@@ -7,6 +7,7 @@ const Update = props => {
     const [actionName, setActionName] = useState('');
     const [formValid, setFormValid] = useState(false)
     const [askLbl, setAskLbl] = useState('')
+    const [placeHolder,setPlaceHolder] = useState('')
 
     const route = useRoute()
     const currentScreen = route.name;
@@ -16,9 +17,11 @@ const Update = props => {
                 switch (props.action){
                     case 'Rename':
                         setAskLbl('Rename your organization :');
+                        setPlaceHolder('Organization name')
                         break;
                     case 'Add':
                         setAskLbl('Add a new board :');
+                        setPlaceHolder('Name of the board')
                         break;
                     default:
                         break;
@@ -28,9 +31,11 @@ const Update = props => {
                 switch (props.action){
                     case 'Rename':
                         setAskLbl('Rename your list :');
+                        setPlaceHolder('Name of the list')
                         break;
                     case 'Add':
                         setAskLbl('Add a card :');
+                        setPlaceHolder('Name of the card')
                         break;
                     default:
                         break;
@@ -96,7 +101,7 @@ const Update = props => {
                         <Text>{askLbl}</Text>
                         <TextInput
                             style={styles.inputField}
-                            placeholder="Nouveau nom du workspace"
+                            placeholder={placeHolder}
                             // value={updateWorkspaceName}
                             onChangeText={(text) => setActionName(text)}
                         />

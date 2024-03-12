@@ -13,7 +13,7 @@ const List = props => {
         <View style={styles.card} key={list.id}>
           <View style={styles.headerContainer}>
             <Text style={styles.cardTitle}>{list.name}</Text>
-            <Edit id={list.id} delete={props.deleteList} update={props.updateList} createCard={props.createCard} updateCard={props.updateCard} deleteCard={props.deleteCard}/>
+            <Edit id={list.id} delete={props.deleteList} update={props.updateList} add={props.createCard} updateCard={props.updateCard} deleteCard={props.deleteCard}/>
           </View>
           <View style={styles.cardContent}>
             {list.cards.map((card) => (
