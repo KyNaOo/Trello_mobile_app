@@ -1,8 +1,53 @@
-import React from 'react';
-import { View, Text, StyleSheet, ScrollView } from 'react-native';
+import React, { useState, useRef } from 'react';
+import { View, Text, StyleSheet, ScrollView, TouchableOpacity, TextInput, Modal, Button } from 'react-native';
 import Edit from './edit';
 
 const List = props => {
+  const [editableCard, setEditableCard] = useState(null);
+  const [newName, setNewName] = useState('');
+  const [isModalVisible, setIsModalVisible] = useState(false);
+  const [selectedCard, setSelectedCard] = useState(null); // State to store the selected card
+  const lastPressRef = useRef(0);
+
+  const handleEditName = (card) => {
+    if (editableCard === card) {
+      // Confirm name change
+      props.updateCard(card.id, newName);
+      setEditableCard(null);
+      setNewName('');
+    } else {
+      // Start editing name
+      setEditableCard(card);
+      setNewName(card.name);
+    }
+  };
+
+  const handleCancelEdit = () => {
+    setEditableCard(null);
+    setNewName('');
+  };
+
+  const handleDoubleTap = (card) => {
+    const currentTime = new Date().getTime();
+    const delay = 500; // Adjust this value as needed for your double tap detection
+
+    if (currentTime - lastPressRef.current < delay) {
+      setSelectedCard(card); // Set the selected card when double tap occurs
+      setIsModalVisible(true);
+    }
+
+    lastPressRef.current = currentTime;
+  };
+
+  const handleConfirmModal = () => {
+    props.deleteCard(selectedCard.id)
+    setIsModalVisible(false);
+  };
+
+  const handleCancelModal = () => {
+    setIsModalVisible(false);
+  };
+
   return (
     <ScrollView
       contentContainerStyle={styles.container}
@@ -17,20 +62,48 @@ const List = props => {
           </View>
           <View style={styles.cardContent}>
             {list.cards.map((card) => (
-              <View style={styles.card} key={card.id}>
-                <Text>{card.id}</Text>
-                <Text style={styles.cardTitle}>{card.name}</Text>
-                {/* Additional properties you want to display for the card */}
-              </View>
+              <TouchableOpacity
+                key={card.id}
+                onPress={() => handleEditName(card)}
+                onDoublePress={() => handleDoubleTap(card)}
+              >
+                <View style={styles.card}>
+                  {editableCard === card ? (
+                    <View style={styles.editableTitleContainer}>
+                      <TextInput
+                        style={styles.editableTitle}
+                        value={newName}
+                        onChangeText={setNewName}
+                      />
+                      <TouchableOpacity onPress={handleCancelEdit}>
+                        <Text style={styles.cancelButton}>Cancel</Text>
+                      </TouchableOpacity>
+                    </View>
+                  ) : (
+                    <TouchableOpacity onPress={() => handleDoubleTap(card)}>
+                      <Text style={styles.cardTitle}>{card.name}</Text>
+                    </TouchableOpacity>
+                  )}
+                  {/* Additional properties you want to display for the card */}
+                </View>
+              </TouchableOpacity>
             ))}
           </View>
         </View>
       ))}
-      {props.listData.length > 5 && (
-        <View style={styles.lastcard}>
-          <Text style={styles.cardTitle}></Text>
+
+      {/* Modal */}
+      <Modal visible={isModalVisible} transparent>
+        <View style={styles.modalContainer}>
+          <View style={styles.modalContent}>
+            <Text style={styles.modalText}>You really want to delete {selectedCard && selectedCard.name}?</Text>
+            <View style={styles.modalButtons}>
+              <Button title="Confirm" onPress={() => handleConfirmModal(selectedCard)} color="#42b883" />
+              <Button title="Cancel" onPress={handleCancelModal} color="#ef5a5a" />
+            </View>
+          </View>
         </View>
-      )}
+      </Modal>
     </ScrollView>
   );
 };
@@ -55,15 +128,47 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     marginBottom: 10,
   },
+  editableTitleContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  editableTitle: {
+    flex: 1,
+    fontSize: 18,
+    fontWeight: 'bold',
+    marginBottom: 10,
+    borderWidth: 1,
+    borderColor: 'gray',
+    padding: 5,
+  },
+  cancelButton: {
+    marginLeft: 10,
+    color: 'red',
+    fontWeight: 'bold',
+  },
   cardContent: {
     // Additional styling for the content inside the card
   },
-  lastcard: {
+  modalContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+  },
+  modalContent: {
     backgroundColor: '#fff',
-    borderRadius: 8,
-    elevation: 2,
-    marginVertical: 6,
-    padding: 15,
+    padding: 20,
+    borderRadius: 10,
+    elevation: 5,
+  },
+  modalText: {
+    fontSize: 16,
+    marginBottom: 20,
+    textAlign: 'center',
+  },
+  modalButtons: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
   },
 });
 

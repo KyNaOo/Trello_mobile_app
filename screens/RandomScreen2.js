@@ -173,10 +173,10 @@ export default function RandomScreen2({route}) {
       }
     };
 
-    const closeCard = async () => {
+    const closeCard = async (id) => {
       try {
         const response = await fetch(
-          `https://api.trello.com/1/cards/${cardId}?${endUrl}`,
+          `https://api.trello.com/1/cards/${id}?${endUrl}`,
           {
             method: 'DELETE',
             headers: {
