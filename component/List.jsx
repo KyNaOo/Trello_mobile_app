@@ -1,20 +1,24 @@
 import React, { useState, useRef } from 'react';
-import { View, Text, StyleSheet, ScrollView, TouchableOpacity, TextInput, Modal, Button } from 'react-native';
+import { View, Text, StyleSheet, ScrollView, TouchableOpacity, TextInput, Modal, Button, Image } from 'react-native';
 import Edit from './edit';
+import { Entypo } from '@expo/vector-icons';
 
 const List = props => {
   const [editableCard, setEditableCard] = useState(null);
   const [newName, setNewName] = useState('');
   const [isModalVisible, setIsModalVisible] = useState(false);
+  const [editMode,setEditMode] = useState(false)
   const [selectedCard, setSelectedCard] = useState(null); // State to store the selected card
   const lastPressRef = useRef(0);
 
   const handleEditName = (card) => {
+    setEditMode(true)
     if (editableCard === card) {
       // Confirm name change
       props.updateCard(card.id, newName);
       setEditableCard(null);
       setNewName('');
+      setEditMode(false);
     } else {
       // Start editing name
       setEditableCard(card);
@@ -23,6 +27,7 @@ const List = props => {
   };
 
   const handleCancelEdit = () => {
+    setEditMode(false);
     setEditableCard(null);
     setNewName('');
   };
@@ -48,6 +53,10 @@ const List = props => {
     setIsModalVisible(false);
   };
 
+  handleButtonClick = (card) => {
+    console.log("action performed on " + card.name)
+  }
+
   return (
     <ScrollView
       contentContainerStyle={styles.container}
@@ -68,23 +77,30 @@ const List = props => {
                 onDoublePress={() => handleDoubleTap(card)}
               >
                 <View style={styles.card}>
-                  {editableCard === card ? (
-                    <View style={styles.editableTitleContainer}>
-                      <TextInput
-                        style={styles.editableTitle}
-                        value={newName}
-                        onChangeText={setNewName}
-                      />
-                      <TouchableOpacity onPress={handleCancelEdit}>
-                        <Text style={styles.cancelButton}>Cancel</Text>
+                  <View style={styles.cardItemContainer}>
+                    {editableCard === card ? (
+                      <View style={styles.editableTitleContainer}>
+                        <TextInput
+                          style={styles.editableTitle}
+                          value={newName}
+                          onChangeText={setNewName}
+                        />
+                        <TouchableOpacity onPress={handleCancelEdit}>
+                          <Text style={styles.cancelButton}>Cancel</Text>
+                        </TouchableOpacity>
+                      </View>
+                    ) : (
+                      <TouchableOpacity onPress={() => handleDoubleTap(card)}>
+                        <Text style={styles.cardTitle}>{card.name}</Text>
                       </TouchableOpacity>
-                    </View>
-                  ) : (
-                    <TouchableOpacity onPress={() => handleDoubleTap(card)}>
-                      <Text style={styles.cardTitle}>{card.name}</Text>
-                    </TouchableOpacity>
-                  )}
-                  {/* Additional properties you want to display for the card */}
+                    )}
+                    {
+                      editMode === true ? (<></>):(<TouchableOpacity onPress={() => handleButtonClick(card)}>
+                      <Entypo name="link" size={30} color="black" />
+                      </TouchableOpacity>)
+                    }
+                    
+                  </View>
                 </View>
               </TouchableOpacity>
             ))}
@@ -169,6 +185,11 @@ const styles = StyleSheet.create({
   modalButtons: {
     flexDirection: 'row',
     justifyContent: 'space-between',
+  },
+  cardItemContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
   },
 });
 
