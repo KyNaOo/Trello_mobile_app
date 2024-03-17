@@ -8,6 +8,7 @@ export default function RandomScreen2({route}) {
   const [trelloData, setTrelloData] = useState([]);
   const [cardData,setCardData] = useState([]);
   const [formValid,setFormValid] = useState(false);
+  const [members,setMembers] = useState([])
   const {board} = route.params;
 
   const listId='65e726491d55e6bbea104144'
@@ -195,6 +196,76 @@ export default function RandomScreen2({route}) {
         console.error('Error making PUT request:', error.message);
       }
     };
+    //
+    //Members
+    //
+    const getMembers = async () => {
+      try {
+        const response = await fetch(
+          `https://api.trello.com/1/organizations/${board.idOrganization}/members?${endUrl}`
+        );
+  
+        if (!response.ok) {
+          console.error(`Error: ${response.status} ${response.statusText}`);
+          return;
+        }
+  
+        const data = await response.json();
+        setMembers(data)
+        
+      } catch (error) {
+        console.error('Error making GET request:', error.message);
+      }
+    };
+
+    const assignMember = async (idCard,idMember) => {
+      try {
+        const response = await fetch(
+          `https://api.trello.com/1/cards/${idCard}/idMembers?${endUrl}`,
+          {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              'Accept': 'application/json',
+            },
+            body: JSON.stringify({
+              value:`${idMember}`,
+            }),
+          }
+        );
+        if (!response.ok) {
+          console.error(`Error: ${response.status} ${response.statusText}`);
+          return;
+        }else{
+          setFormValid(!formValid)
+        }
+      } catch (error) {
+        console.error('Error making POST request:', error.message);
+      }
+    };
+
+    const removeMember = async (idCard,idMember) => {
+      try {
+        const response = await fetch(
+          `https://api.trello.com/1/cards/${id}/idMembers/${idMember}?${endUrl}`,
+          {
+            method: 'DELETE',
+            headers: {
+              'Content-Type': 'application/json',
+              'Accept': 'application/json',
+            }
+          }
+        );
+        if (!response.ok) {
+          console.error(`Error: ${response.status} ${response.statusText}`);
+          return;
+        }else{
+          setFormValid(!formValid)
+        }
+      } catch (error) {
+        console.error('Error making PUT request:', error.message);
+      }
+    };
 
     useEffect(() => {
       // Call the getAllList function when the component mounts
@@ -204,7 +275,7 @@ export default function RandomScreen2({route}) {
   return (
     <View>
     <StickyButtonComponent addList={addList}/>
-    <List listData={trelloData} deleteList={closeList} updateList={updateList} createCard={createCard} updateCard={updateCard} deleteCard={closeCard} />
+    <List listData={trelloData} deleteList={closeList} updateList={updateList} createCard={createCard} updateCard={updateCard} deleteCard={closeCard} members={board.idOrganization} />
   </View>
   )
 }
