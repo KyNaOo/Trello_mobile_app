@@ -7,24 +7,22 @@ const List = props => {
   const [editableCard, setEditableCard] = useState(null);
   const [newName, setNewName] = useState('');
   const [isModalVisible, setIsModalVisible] = useState(false);
-  const [editMode,setEditMode] = useState(false)
+  const [editMode, setEditMode] = useState(false);
   const [selectedCard, setSelectedCard] = useState(null); // State to store the selected card
   const lastPressRef = useRef(0);
 
   const handleEditName = (card) => {
-    setEditMode(true)
-    if (editableCard === card) {
-      // Confirm name change
-      props.updateCard(card.id, newName);
-      setEditableCard(null);
-      setNewName('');
-      setEditMode(false);
-    } else {
-      // Start editing name
       setEditableCard(card);
       setNewName(card.name);
-    }
+      setEditMode(true);
   };
+
+  const editName = (card) => {
+    props.updateCard(card.id, newName);
+    setEditableCard(null);
+    setNewName('');
+    setEditMode(false);
+  }
 
   const handleCancelEdit = () => {
     setEditMode(false);
@@ -53,7 +51,7 @@ const List = props => {
     setIsModalVisible(false);
   };
 
-  handleButtonClick = (card) => {
+  const handleButtonClick = (card) => {
     console.log("action performed on " + card.name)
   }
 
@@ -85,9 +83,14 @@ const List = props => {
                           value={newName}
                           onChangeText={setNewName}
                         />
-                        <TouchableOpacity onPress={handleCancelEdit}>
-                          <Text style={styles.cancelButton}>Cancel</Text>
-                        </TouchableOpacity>
+                        <View style={styles.buttonContainer}>
+                          <TouchableOpacity onPress={handleCancelEdit}>
+                            <Text style={styles.cancelButton}>Cancel</Text>
+                          </TouchableOpacity>
+                          <TouchableOpacity onPress={() => editName(card)}>
+                            <Text style={styles.confirmButton}>Confirm</Text>
+                          </TouchableOpacity>
+                        </View>
                       </View>
                     ) : (
                       <TouchableOpacity onPress={() => handleDoubleTap(card)}>
@@ -159,7 +162,13 @@ const styles = StyleSheet.create({
   },
   cancelButton: {
     marginLeft: 10,
-    color: 'red',
+    color: '#ef5a5a',
+    fontWeight: 'bold',
+  },
+  confirmButton: {
+    marginLeft: 10,
+    paddingTop:10,
+    color: '#42b883',
     fontWeight: 'bold',
   },
   cardContent: {
@@ -189,6 +198,10 @@ const styles = StyleSheet.create({
   cardItemContainer: {
     flexDirection: 'row',
     justifyContent: 'space-between',
+    alignItems: 'center',
+  },
+  buttonContainer: {
+    flexDirection: 'column',
     alignItems: 'center',
   },
 });
