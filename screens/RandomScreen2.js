@@ -217,6 +217,55 @@ export default function RandomScreen2({route}) {
       }
     };
 
+    const getMemberOfCard = async (id) => {
+      try {
+        const response = await fetch(
+          `https://api.trello.com/1/cards/${id}/members?${endUrl}`
+        );
+  
+        if (!response.ok) {
+          console.error(`Error: ${response.status} ${response.statusText}`);
+          return;
+        }
+  
+        const data = await response.json();
+
+        return data
+        
+      } catch (error) {
+        console.error('Error making GET request:', error.message);
+      }
+    };
+
+    const isMember = async (idCard, idMember) => {
+      
+        try {
+          const response = await fetch(
+              `https://api.trello.com/1/cards/${idCard}?${endUrl}`
+          );
+  
+          if (!response.ok) {
+              console.error(`Error: ${response.status} ${response.statusText}`);
+              return;
+          }
+  
+          const data = await response.json();
+  
+          // Check if idMember exists in the idMembers array
+          const isMemberr = data.idMembers.includes(idMember);
+          if(isMemberr){      
+            return true
+          }
+         
+          return false
+  
+      } catch (error) {
+          console.error('Error making GET request:', error.message);
+      
+      }
+  };
+  
+
     const assignMember = async (idCard,idMember) => {
       try {
         const response = await fetch(
@@ -233,8 +282,8 @@ export default function RandomScreen2({route}) {
           }
         );
         if (!response.ok) {
-          console.error(`Error: ${response.status} ${response.statusText}`);
-          return;
+          removeMember(idCard,idMember)
+          setFormValid(!formValid)
         }else{
           setFormValid(!formValid)
         }
@@ -246,7 +295,7 @@ export default function RandomScreen2({route}) {
     const removeMember = async (idCard,idMember) => {
       try {
         const response = await fetch(
-          `https://api.trello.com/1/cards/${id}/idMembers/${idMember}?${endUrl}`,
+          `https://api.trello.com/1/cards/${idCard}/idMembers/${idMember}?${endUrl}`,
           {
             method: 'DELETE',
             headers: {
@@ -269,8 +318,9 @@ export default function RandomScreen2({route}) {
     useEffect(() => {
       // Call the getAllList function when the component mounts
       getAllList();
+      getMembers();
     }, [formValid, board]);
-    
+
   return (
     <View>
     <StickyButtonComponent addList={addList}/>
