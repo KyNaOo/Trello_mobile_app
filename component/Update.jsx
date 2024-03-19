@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {View, Button, Modal, StyleSheet, Text, TextInput, TouchableOpacity} from 'react-native';
+import {View, Modal, StyleSheet, Text, TextInput, TouchableOpacity} from 'react-native';
 import {useRoute} from "@react-navigation/native";
 
 
@@ -47,33 +47,15 @@ const Update = props => {
     }
 
     const handleConfirm = async () => {
-        switch (currentScreen){
-            case 'Random':
-                switch (props.action) {
-                    case 'Rename':
-                        await props.update(props.id, actionName);
-                        break;
-                    case 'Add':
-                        await props.add(props.id, actionName);
-                        break;
-                    default:
-                        break;
-                }
+        switch (props.action) {
+            case 'Rename':
+                await props.update(props.id, actionName);
                 break;
-            case 'Random2':
-                switch (props.action) {
-                    case 'Rename':
-                        await props.update(props.id, actionName);
-                        break;
-                    case 'Add':
-                        await props.add(props.id, actionName);
-                        break;
-                    default:
-                        break;
-                }
+            case 'Add':
+                await props.add(props.id, actionName);
                 break;
             default:
-                break
+                break;
         }
         handleCloseModal();
     }
@@ -83,9 +65,6 @@ const Update = props => {
     }
 
     useEffect(() => {
-
-        // props.getOrga()
-        // props.getBoards()
         loadTxt();
     }, [formValid]);
 
@@ -102,21 +81,20 @@ const Update = props => {
                         <TextInput
                             style={styles.inputField}
                             placeholder={placeHolder}
-                            // value={updateWorkspaceName}
                             onChangeText={(text) => setActionName(text)}
                         />
                         <View style={styles.buttonContainer}>
-                        <TouchableOpacity
-                            style={[styles.button, styles.confirmButton]}
-                            onPress={handleConfirm}
-                        >
-                            <Text style={styles.buttonText}>Confirm</Text>
-                        </TouchableOpacity>
                         <TouchableOpacity
                             style={[styles.button, styles.cancelButton]}
                             onPress={() => handleCloseModal()}
                         >
                             <Text style={styles.buttonText}>Cancel</Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity
+                            style={[styles.button, styles.confirmButton]}
+                            onPress={handleConfirm}
+                        >
+                            <Text style={styles.buttonText}>Confirm</Text>
                         </TouchableOpacity>
                         </View>
                     </View>
@@ -155,12 +133,12 @@ const styles = StyleSheet.create({
     },
     cancelButton: {
         backgroundColor: '#ef5a5a',
-        marginLeft: 5,
+        marginRight: 5,
     },
 
     confirmButton: {
         backgroundColor: '#42b883',
-        marginRight: 5,
+        marginLeft: 5,
     },
     buttonContainer: {
         flexDirection: 'row',
