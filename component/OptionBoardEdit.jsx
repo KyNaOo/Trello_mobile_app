@@ -10,8 +10,8 @@ const OptionBoardEdit = props => {
     const navigation = useNavigation();
     const [currentName, setCurrentName] = useState(props.board.name)
 
-    const renameBoard = async (addName) => {
-        const url = `https://api.trello.com/1/boards/${props.board.id}?name=${addName}&${props.endUrl}`;
+    const renameBoard = async (addName, id) => {
+        const url = `https://api.trello.com/1/boards/${id}?name=${addName}&${props.endUrl}`;
         const response = await fetch(url,
             {
                 method: 'PUT',
@@ -69,14 +69,14 @@ const OptionBoardEdit = props => {
                     <Entypo name="dots-three-horizontal" size={30} color="black" />
                 </View>
             </MenuTrigger>
-            <MenuOptions>
+            <MenuOptions customStyles={{ optionsContainer: styles.menuOptions }}>
                 <MenuOption onSelect={() => {
                     setModalVisible(true)
                 }} text="Rename" />
                 <MenuOption onSelect={() => deleteBoard()} text="Delete" />
             </MenuOptions>
             </Menu>
-            <ModalOneField renameBoard={renameBoard} modalVisible={modalVisible} setModalVisible={setModalVisible}/>
+            <ModalOneField id={props.board.id} action={renameBoard} modalVisible={modalVisible} setModalVisible={setModalVisible}/>
         </View>
 
         // </TouchableOpacity>
@@ -103,6 +103,10 @@ const styles = StyleSheet.create({
         flexDirection: "row",
         alignItems: "center",
         width: 200,
+    },
+    menuOptions: {
+        marginLeft: 170,
+        marginTop: 60,
     },
 });
 export default OptionBoardEdit;

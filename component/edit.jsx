@@ -40,25 +40,16 @@ const Edit = props => {
           }} text={txtAdd} />
         </MenuOptions>
       </Menu>
-
       {
         actionClicked && <Update
               action={action}
-              endUrl={props.endUrl}
-
               actionClicked={actionClicked}
               setActionClicked={setActionClicked}
-              modal={actionClicked}
-
-              getOrga={props.getOrga}
-              getBoards={props.getBoards}
               update={props.update}
               add={props.add}
               id={props.id}
-
           />
       }
-
     </View>
   );
 };

@@ -35,8 +35,6 @@ export default function Workspaces() {
                         'Content-Type': 'application/json',
                         'Accept': 'application/json',
                     },
-                    // Add any additional headers or body data as needed
-                    // body: JSON.stringify({ key: 'value' }),
                 }
             );
 
@@ -95,12 +93,13 @@ export default function Workspaces() {
         return user;
     }
     return (
-
+        <View>
+        <StickyButtonComponent addOrga={addOrga} endUrl={endUrl}/>
         <ScrollView contentContainerStyle={styles.container}
                     contentInset={{ bottom: 150 }}
                     contentOffset={{ y: -20 }}
         >
-            <StickyButtonComponent addOrga={addOrga} endUrl={endUrl}/>
+
             {dataWorkspace && dataWorkspace.map((workspace) => {
                 return(
                     <View>
@@ -110,6 +109,7 @@ export default function Workspaces() {
             })}
             <StatusBar style="auto" />
         </ScrollView>
+        </View>
     );
 }
 
