@@ -1,18 +1,11 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, TextInput, Modal, TouchableOpacity } from 'react-native';
+import { View, StyleSheet } from 'react-native';
 import { Entypo } from '@expo/vector-icons';
 import { Menu, MenuTrigger, MenuOptions, MenuOption } from 'react-native-popup-menu';
 import {useRoute} from "@react-navigation/native";
 import Update from "./Update";
 
 const Edit = props => {
-  const [isModalVisible, setModalVisible] = useState(false);
-  const [textInputValue, setTextInputValue] = useState('');
-
-  const closeModal = () => {
-    setModalVisible(false);
-  };
-
   const [actionClicked, setActionClicked] = useState(false)
   const [action, setAction] = useState('')
   const route = useRoute()

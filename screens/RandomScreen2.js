@@ -1,8 +1,9 @@
-import { View, Text, TextInput, Button } from 'react-native'
+import {View, Text, TextInput, Button, StyleSheet, TouchableOpacity} from 'react-native'
 import React from 'react'
 import { useEffect, useState } from 'react';
 import List from '../component/List';
 import StickyButtonComponent from '../component/StickyButton';
+import OptionBoardEdit from "../component/OptionBoardEdit";
 
 export default function RandomScreen2({route}) {
   const [trelloData, setTrelloData] = useState([]);
@@ -11,8 +12,6 @@ export default function RandomScreen2({route}) {
   const [members,setMembers] = useState([])
   const {board} = route.params;
 
-  const listId='65e726491d55e6bbea104144'
-  const cardId='65f05dcdec1a8382c6b57c41'
   const endUrl = `key=${process.env.EXPO_PUBLIC_API_KEY}&token=${process.env.EXPO_PUBLIC_API_TOKEN}`;
 
     //CRUD for List
@@ -275,7 +274,25 @@ export default function RandomScreen2({route}) {
   return (
     <View>
     <StickyButtonComponent addList={addList}/>
+      <OptionBoardEdit board={board} endUrl={endUrl}/>
+      {/*<TouchableOpacity style={styles.title}>*/}
+      {/*  <Text style={styles.titleTxt}>{board.name}</Text>*/}
+      {/*</TouchableOpacity>*/}
     <List listData={trelloData} deleteList={closeList} updateList={updateList} createCard={createCard} updateCard={updateCard} deleteCard={closeCard} members={board.idOrganization} />
   </View>
   )
 }
+const styles = StyleSheet.create({
+  title: {
+    backgroundColor: '#D3D3D3',
+    margin: 10,
+    paddingLeft: 25,
+    padding: 10,
+    borderRadius: 4,
+  },
+  titleTxt: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    padding: 10,
+  }
+});
