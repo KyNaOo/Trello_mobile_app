@@ -7,6 +7,7 @@ const Organization = props => {
     const [dataBoards, setDataBoards] = useState([]);
     const [deleteState, setDeleteState] = useState(false)
     const navigation = useNavigation();
+    const imAddingBoard='hey';
 
 
     const getBoardsOfOrga = async () =>{
@@ -14,7 +15,6 @@ const Organization = props => {
         const response = await fetch(urlBoards);
         const boards = await response.json();
         setDataBoards(boards)
-        // console.warn(dataBoards)
     }
 
     const deleteOrga = async () => {
@@ -51,7 +51,7 @@ const Organization = props => {
         <View style={styles.container} key={props.organization.id}>
             <View style={styles.headerContainer}>
             <Text style={styles.orgaName}>{props.organization.displayName}</Text>
-            <Edit id={props.organization.id} delete={deleteOrga} getOrga={props.getOrga} endUrl={props.endUrl} getBoards={getBoardsOfOrga} update={props.update} add={props.add}/>
+            <Edit addKanban={props.addKanban} imAddingBoard={imAddingBoard} id={props.organization.id} delete={deleteOrga} getOrga={props.getOrga} endUrl={props.endUrl} getBoards={getBoardsOfOrga} update={props.update} add={props.add}/>
             </View>
                 {dataBoards && dataBoards.map((board) => {
                     return (

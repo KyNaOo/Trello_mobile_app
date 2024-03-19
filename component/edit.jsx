@@ -38,6 +38,14 @@ const Edit = props => {
             setActionClicked(true)
             setAction('Add')
           }} text={txtAdd} />
+          {
+            props.imAddingBoard &&
+              <MenuOption onSelect={() => {
+                setActionClicked(true)
+                setAction('Kanban')
+              }} text={'Add a Kanban'} />
+
+          }
         </MenuOptions>
       </Menu>
       {
@@ -47,6 +55,7 @@ const Edit = props => {
               setActionClicked={setActionClicked}
               update={props.update}
               add={props.add}
+              addKanban={props.addKanban}
               id={props.id}
           />
       }

@@ -54,6 +54,9 @@ const Update = props => {
             case 'Add':
                 await props.add(props.id, actionName);
                 break;
+            case 'Kanban':
+                props.addKanban(props.id, actionName)
+                break;
             default:
                 break;
         }

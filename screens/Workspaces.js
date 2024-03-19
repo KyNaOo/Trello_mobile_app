@@ -17,14 +17,30 @@ export default function Workspaces() {
     const navigation = useNavigation();
     const [dataWorkspace, setDataWorkspace] = useState([]);
 
-    const getOrga = async ()=> {
-        const urlWorkspaces = `https://api.trello.com/1/members/me/organizations?${endUrl}`;
-        const fetchRespOrga = await fetch(urlWorkspaces);
-        return await fetchRespOrga.json();
-    }
+    const getOrga = async () => {
+        try {
+            const response = await fetch(
+                `https://api.trello.com/1/members/me/organizations?${endUrl}`
+            );
+
+            if (!response.ok) {
+                console.error(`Error: ${response.status} ${response.statusText}`);
+                return;
+            }
+
+            const data = await response.json();
+            setDataWorkspace(data);
+
+        } catch (error) {
+            console.error('Error making GET request:', error.message);
+        }
+    };
+
+
     const getUser = async () => {
         setUser(await userService.getUser());
     }
+
     const addOrga = async (orgaName) => {
         try {
             const response = await fetch(
@@ -35,18 +51,21 @@ export default function Workspaces() {
                         'Content-Type': 'application/json',
                         'Accept': 'application/json',
                     },
+                    // Add any additional headers or body data as needed
+                    // body: JSON.stringify({ key: 'value' }),
                 }
             );
 
-            if (response.ok) {
-                setFormValid(!formValid);
-            } else {
+            if (!response.ok) {
                 console.error(`Error: ${response.status} ${response.statusText}`);
+            }else{
+                setFormValid(!formValid)
             }
         } catch (error) {
             console.error('Error making POST request:', error.message);
         }
-    }
+    };
+
 
     const updateOrga = async (idOrga, newName) => {
         let url = `https://api.trello.com/1/organizations/${idOrga}?displayName=${newName}&${endUrl}`
@@ -78,15 +97,30 @@ export default function Workspaces() {
         }
     }
 
+    const addKanban = async (id, name) => {
+        const url = `https://api.trello.com/1/boards/?name=${name}&idOrganization=${id}&idBoardSource=65ddb77d79b99cc22c05dd14&${endUrl}`;
+        const response = await fetch(url, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json',
+            },
+        })
+        console.warn(response.status)
+        if (response.ok){
+            setFormValid(!formValid);
+        }else{
+            console.warn("Error occurred when adding kanban")
+        }
+    }
+
     navigation.addListener('focus', () => {
         setTokenRefresh(!tokenRefresh);
     } )
 
     useEffect(() => {
         getUser();
-        getOrga().then(r => {
-            setDataWorkspace(r)
-        });
+        getOrga();
     }, [tokenRefresh, formValid]);
 
     if (null === user) {
@@ -95,15 +129,14 @@ export default function Workspaces() {
     return (
         <View>
         <StickyButtonComponent addOrga={addOrga} endUrl={endUrl}/>
-        <ScrollView contentContainerStyle={styles.container}
-                    contentInset={{ bottom: 150 }}
+        <ScrollView contentInset={{ bottom: 150 }}
                     contentOffset={{ y: -20 }}
         >
 
             {dataWorkspace && dataWorkspace.map((workspace) => {
                 return(
                     <View>
-                        <Organization setFormValid={setFormValid} tokenRefresh={tokenRefresh} organization={workspace} endUrl={endUrl} formValid={formValid} getOrga={getOrga} update={updateOrga} add={addBoard}/>
+                        <Organization addKanban={addKanban} setFormValid={setFormValid} tokenRefresh={tokenRefresh} organization={workspace} endUrl={endUrl} formValid={formValid} getOrga={getOrga} update={updateOrga} add={addBoard}/>
                     </View>
                 )
             })}
@@ -112,8 +145,3 @@ export default function Workspaces() {
         </View>
     );
 }
-
-const styles = StyleSheet.create({
-
-
-});
