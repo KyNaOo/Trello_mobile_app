@@ -1,15 +1,12 @@
 import React, {useEffect, useState} from 'react';
-import {Button, Pressable, ScrollView, StyleSheet, Text, TouchableOpacity, View} from "react-native";
-import Update from "./Update";
+import {StyleSheet, Text, TouchableOpacity, View} from "react-native";
 import Edit from "./edit";
 import {useNavigation} from "@react-navigation/native";
 
 const Organization = props => {
-    //console.warn(props.organization)
     const [dataBoards, setDataBoards] = useState([]);
     const [deleteState, setDeleteState] = useState(false)
     const navigation = useNavigation();
-    const [boardSelect, setBoardSelect] = useState(undefined)
 
 
     const getBoardsOfOrga = async () =>{
@@ -35,6 +32,7 @@ const Organization = props => {
             )
         if (response.ok){
             setDeleteState(!deleteState);
+            props.setFormValid(!props.formValid);
         } else {
             console.warn("Error with the delete function")
         }
@@ -47,7 +45,7 @@ const Organization = props => {
     useEffect(() => {
         getBoardsOfOrga()
         props.getOrga()
-    }, [props.formValid, deleteState]);
+    }, [props.formValid, deleteState, props.tokenRefresh]);
 
     return (
         <View style={styles.container} key={props.organization.id}>

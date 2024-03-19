@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useState} from 'react';
 import {Modal, StyleSheet, Text, TextInput, TouchableOpacity, View} from "react-native";
 
 const ModalOneField = props => {
@@ -19,7 +19,6 @@ const ModalOneField = props => {
                         style={styles.input}
                         placeholder="Name"
                         onChangeText={(text) => setAddName(text)}
-                        // Add onChangeText and value props to handle input changes
                     />
                     <View style={styles.buttonContainer}>
                         <TouchableOpacity

@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {View, Button, Modal, StyleSheet, Text, TextInput, TouchableOpacity} from 'react-native';
+import {View, Modal, StyleSheet, Text, TextInput, TouchableOpacity} from 'react-native';
 import {useRoute} from "@react-navigation/native";
 
 
@@ -83,9 +83,6 @@ const Update = props => {
     }
 
     useEffect(() => {
-
-        // props.getOrga()
-        // props.getBoards()
         loadTxt();
     }, [formValid]);
 
@@ -102,7 +99,6 @@ const Update = props => {
                         <TextInput
                             style={styles.inputField}
                             placeholder={placeHolder}
-                            // value={updateWorkspaceName}
                             onChangeText={(text) => setActionName(text)}
                         />
                         <View style={styles.buttonContainer}>

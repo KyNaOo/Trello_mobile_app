@@ -1,17 +1,13 @@
 import React, {useEffect, useState} from 'react';
 import {Alert, Modal, StyleSheet, Text, TextInput, TouchableOpacity, View} from "react-native";
 import {Menu, MenuOption, MenuOptions, MenuTrigger} from "react-native-popup-menu";
-import Update from "./Update";
 import ModalOneField from "./ModalOneField";
-import modalOneField from "./ModalOneField";
 import {Entypo} from "@expo/vector-icons";
 import {useNavigation} from "@react-navigation/native";
 
 const OptionBoardEdit = props => {
-    const [isModalVisible, setModalVisible] = useState(false);
-    const [formValid, setFormValid] = useState(false)
+    const [modalVisible, setModalVisible] = useState(false);
     const navigation = useNavigation();
-
 
     const renameBoard = async (addName) => {
         const url = `https://api.trello.com/1/boards/${props.board.id}?name=${addName}&${props.endUrl}`;
@@ -23,29 +19,46 @@ const OptionBoardEdit = props => {
                     'Accept': 'application/json',
                 },
             });
-        const data = await response.json();
-        props.board.name = data.name
         setModalVisible(false);
-        if (response.ok){
-            setFormValid(!formValid)
-        } else if(response.status === 401){
+        if (response.ok) {
+            const data = await response.json();
+            props.board.name = data.name
+        } else if (response.status === 401) {
             Alert.alert('Unauthorized', 'You don\'t have the rights to rename this board')
         } else {
             console.warn("Error with the request")
         }
     }
-
-    const openBoardScreen = (board) => {
-        navigation.navigate('Random')
+    const deleteBoard = async () => {
+        const url = `https://api.trello.com/1/boards/${props.board.id}?${props.endUrl}`;
+        const response = await fetch(url,
+            {
+                method: 'DELETE',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json',
+                },
+            });
+        if (response.ok) {
+            openBoardScreen()
+        } else if (response.status === 401) {
+                Alert.alert('Unauthorized', 'You don\'t have the rights to delete this board')
+            } else {
+                console.warn("Error with the request")
+            }
     }
 
 
+
+    const openBoardScreen = () => {
+        navigation.navigate('Random')
+    }
     return (
         // <TouchableOpacity>
         <View>
             <TouchableOpacity style={styles.row} onPress={() => openBoardScreen()}>
-                <Entypo name="chevron-thin-left" size={30} color="black"/>
-                <Text>Back to the organizations</Text>
+                <Entypo name="chevron-thin-left" size={25} color="black"/>
+                <Text>Back</Text>
             </TouchableOpacity>
             <Menu>
             <MenuTrigger>
@@ -58,10 +71,10 @@ const OptionBoardEdit = props => {
                 <MenuOption onSelect={() => {
                     setModalVisible(true)
                 }} text="Rename" />
-                <MenuOption onSelect={() => props.delete(props.board.id)} text="Delete" />
+                <MenuOption onSelect={() => deleteBoard()} text="Delete" />
             </MenuOptions>
             </Menu>
-            <ModalOneField renameBoard={renameBoard} modalVisible={isModalVisible} setModalVisible={setModalVisible}/>
+            <ModalOneField renameBoard={renameBoard} modalVisible={modalVisible} setModalVisible={setModalVisible}/>
         </View>
 
         // </TouchableOpacity>
