@@ -8,6 +8,7 @@ import {useNavigation} from "@react-navigation/native";
 const OptionBoardEdit = props => {
     const [modalVisible, setModalVisible] = useState(false);
     const navigation = useNavigation();
+    const [currentName, setCurrentName] = useState(props.board.name)
 
     const renameBoard = async (addName) => {
         const url = `https://api.trello.com/1/boards/${props.board.id}?name=${addName}&${props.endUrl}`;
@@ -23,6 +24,7 @@ const OptionBoardEdit = props => {
         if (response.ok) {
             const data = await response.json();
             props.board.name = data.name
+            setCurrentName(data.name)
         } else if (response.status === 401) {
             Alert.alert('Unauthorized', 'You don\'t have the rights to rename this board')
         } else {
@@ -47,9 +49,9 @@ const OptionBoardEdit = props => {
                 console.warn("Error with the request")
             }
     }
-
-
-
+    useEffect(() => {
+        setCurrentName(props.board.name)
+    }, [props.board]);
     const openBoardScreen = () => {
         navigation.navigate('Random')
     }
@@ -63,7 +65,7 @@ const OptionBoardEdit = props => {
             <Menu>
             <MenuTrigger>
                 <View style={styles.title}>
-                  <Text style={styles.titleTxt}>{props.board.name}</Text>
+                  <Text style={styles.titleTxt}>{currentName}</Text>
                     <Entypo name="dots-three-horizontal" size={30} color="black" />
                 </View>
             </MenuTrigger>
