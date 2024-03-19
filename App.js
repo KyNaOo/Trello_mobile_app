@@ -3,17 +3,15 @@ import {StatusBar} from "expo-status-bar/build/StatusBar";
 import TopBar from "./component/TopBar";
 import {NavigationContainer} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
-import HomeScreen from './screens/HomeScreen';
 import Workspaces from './screens/Workspaces';
-import RandomScreen2 from './screens/RandomScreen2';
 import RandomScreen3 from './screens/RandomScreen3';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {useEffect, useState} from "react";
 import {userService} from "./services/userService";
-import AsyncStorage from "@react-native-async-storage/async-storage";
 import { Entypo } from '@expo/vector-icons';
 import { Ionicons } from '@expo/vector-icons';
 import { MenuProvider } from 'react-native-popup-menu';
+import Boards from './screens/Boards'
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -91,10 +89,8 @@ export default function App() {
             <MenuProvider>
             <NavigationContainer>
                 <Tab.Navigator screenOptions={screenOptions}>
-
-                <Tab.Screen name="Home" component={HomeScreen} options={tabScreenOptions('Entypo', 'home','Home')} />
                 <Tab.Screen name="Random" component={Workspaces} options={tabScreenOptions('Entypo', 'blackboard','Board')} />
-                <Tab.Screen name="Random2" component={RandomScreen2} options={tabScreenOptions('Ionicons', 'settings', 'Settings')} />
+                <Tab.Screen name="Random2" component={Boards} options={tabScreenOptions('Ionicons', 'settings', 'Settings')} />
                 <Tab.Screen name="Random3" component={RandomScreen3} options={tabScreenOptions('Ionicons', 'person', 'Profile')} />
 
                 </Tab.Navigator>

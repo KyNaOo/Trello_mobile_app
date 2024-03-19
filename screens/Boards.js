@@ -217,25 +217,6 @@ export default function RandomScreen2({route}) {
       }
     };
 
-    const getMemberOfCard = async (id) => {
-      try {
-        const response = await fetch(
-          `https://api.trello.com/1/cards/${id}/members?${endUrl}`
-        );
-  
-        if (!response.ok) {
-          console.error(`Error: ${response.status} ${response.statusText}`);
-          return;
-        }
-  
-        const data = await response.json();
-
-        return data
-        
-      } catch (error) {
-        console.error('Error making GET request:', error.message);
-      }
-    };
 
     const isMember = async (idCard, idMember) => {
       
@@ -328,7 +309,7 @@ export default function RandomScreen2({route}) {
       {/*<TouchableOpacity style={styles.title}>*/}
       {/*  <Text style={styles.titleTxt}>{board.name}</Text>*/}
       {/*</TouchableOpacity>*/}
-    <List listData={trelloData} deleteList={closeList} updateList={updateList} createCard={createCard} updateCard={updateCard} deleteCard={closeCard} members={board.idOrganization} />
+    <List listData={trelloData} deleteList={closeList} updateList={updateList} createCard={createCard} updateCard={updateCard} deleteCard={closeCard} members={members} isMember={isMember} assignMember={assignMember} />
   </View>
   )
 }

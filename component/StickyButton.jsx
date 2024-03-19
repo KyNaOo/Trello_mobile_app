@@ -77,16 +77,16 @@ const StickyButtonComponent = (props) => {
             />
             <View style={styles.buttonContainer}>
               <TouchableOpacity
-                style={[styles.button, styles.confirmButton]}
-                onPress={handleConfirm}
-              >
-                <Text style={styles.buttonText}>Confirm</Text>
-              </TouchableOpacity>
-              <TouchableOpacity
                 style={[styles.button, styles.cancelButton]}
                 onPress={closeModal}
               >
                 <Text style={styles.buttonText}>Cancel</Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={[styles.button, styles.confirmButton]}
+                onPress={handleConfirm}
+              >
+                <Text style={styles.buttonText}>Confirm</Text>
               </TouchableOpacity>
             </View>
           </View>
@@ -150,11 +150,11 @@ const styles = StyleSheet.create({
   },
   confirmButton: {
     backgroundColor: '#42b883',
-    marginRight: 5,
+    marginLeft: 5,
   },
   cancelButton: {
     backgroundColor: '#ef5a5a',
-    marginLeft: 5,
+    marginRight: 5,
   },
   buttonText: {
     color: '#fff',

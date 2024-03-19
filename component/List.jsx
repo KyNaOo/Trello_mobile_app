@@ -162,11 +162,13 @@ const styles = StyleSheet.create({
     marginLeft: 10,
     color: '#ef5a5a',
     fontWeight: 'bold',
+    paddingBottom: 10
   },
   confirmButton: {
     marginLeft: 10,
     color: '#42b883',
     fontWeight: 'bold',
+    paddingTop:10
   },
   cardContent: {
     // Additional styling for the content inside the card
