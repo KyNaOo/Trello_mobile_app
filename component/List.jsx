@@ -1,7 +1,7 @@
 import React, { useState, useRef } from 'react';
 import { View, Text, StyleSheet, ScrollView, TouchableOpacity, TextInput, Modal, Button, Image } from 'react-native';
 import Edit from './edit';
-import { Entypo } from '@expo/vector-icons';
+import LinkMember from './linkMember'
 
 const List = props => {
   const [editableCard, setEditableCard] = useState(null);
@@ -9,12 +9,13 @@ const List = props => {
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [editMode, setEditMode] = useState(false);
   const [selectedCard, setSelectedCard] = useState(null); // State to store the selected card
+
   const lastPressRef = useRef(0);
 
   const handleEditName = (card) => {
-      setEditableCard(card);
-      setNewName(card.name);
-      setEditMode(true);
+    setEditableCard(card);
+    setNewName(card.name);
+    setEditMode(true);
   };
 
   const editName = (card) => {
@@ -50,10 +51,6 @@ const List = props => {
   const handleCancelModal = () => {
     setIsModalVisible(false);
   };
-
-  const handleButtonClick = (card) => {
-    console.log("action performed on " + card.name)
-  }
 
   return (
     <ScrollView
@@ -95,14 +92,15 @@ const List = props => {
                     ) : (
                       <TouchableOpacity onPress={() => handleDoubleTap(card)}>
                         <Text style={styles.cardTitle}>{card.name}</Text>
+                        <Text>{card.id}</Text>
+                        
                       </TouchableOpacity>
                     )}
                     {
-                      editMode === true ? (<></>):(<TouchableOpacity onPress={() => handleButtonClick(card)}>
-                      <Entypo name="link" size={30} color="black" />
-                      </TouchableOpacity>)
+                      editMode === true ? (<></>):(                  
+                          <LinkMember members={props.members} cardId={card.id} isMember={props.isMember} assignMember={props.assignMember} removeMember={props.removeMember}/>
+                      )
                     }
-                    
                   </View>
                 </View>
               </TouchableOpacity>
@@ -110,7 +108,7 @@ const List = props => {
           </View>
         </View>
       ))}
-
+      
       {/* Modal */}
       <Modal visible={isModalVisible} transparent>
         <View style={styles.modalContainer}>
@@ -167,7 +165,6 @@ const styles = StyleSheet.create({
   },
   confirmButton: {
     marginLeft: 10,
-    paddingTop:10,
     color: '#42b883',
     fontWeight: 'bold',
   },
