@@ -5,7 +5,7 @@ import List from '../component/List';
 import StickyButtonComponent from '../component/StickyButton';
 import OptionBoardEdit from "../component/OptionBoardEdit";
 
-export default function RandomScreen2({route}) {
+export default function Boards({route}) {
   const [trelloData, setTrelloData] = useState([]);
   const [cardData,setCardData] = useState([]);
   const [formValid,setFormValid] = useState(false);

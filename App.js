@@ -4,7 +4,7 @@ import TopBar from "./component/TopBar";
 import {NavigationContainer} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import Workspaces from './screens/Workspaces';
-import RandomScreen3 from './screens/RandomScreen3';
+import Documentation from './screens/Documentation';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {useEffect, useState} from "react";
 import {userService} from "./services/userService";
@@ -12,6 +12,7 @@ import { Entypo } from '@expo/vector-icons';
 import { Ionicons } from '@expo/vector-icons';
 import { MenuProvider } from 'react-native-popup-menu';
 import Boards from './screens/Boards'
+import { TouchableOpacity } from 'react-native';
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -90,12 +91,25 @@ export default function App() {
             <NavigationContainer>
                 <Tab.Navigator screenOptions={screenOptions}>
                 <Tab.Screen name="Random" component={Workspaces} options={tabScreenOptions('Entypo', 'blackboard','Board')} />
-                <Tab.Screen name="Random2" component={Boards} options={tabScreenOptions('Ionicons', 'settings', 'Settings')} />
-                <Tab.Screen name="Random3" component={RandomScreen3} options={tabScreenOptions('Ionicons', 'person', 'Profile')} />
+                
+                <Tab.Screen
+    name="Random2"
+    component={Boards}
+    options={{
+        tabBarIcon: () => (
+            <View style={[{ opacity: 0, width: 0, height: 0 }]}>
+            </View>
+        ),
+        tabBarButton: (props) => <TouchableOpacity {...props} disabled={true} />,
+    }}
+/>
+
+                <Tab.Screen name="Random3" component={Documentation} options={tabScreenOptions('Ionicons', 'information-circle', 'Documentation')} />
 
                 </Tab.Navigator>
             </NavigationContainer>
             </MenuProvider>
+            
          
             <StatusBar style={"light"}/>
         </>
