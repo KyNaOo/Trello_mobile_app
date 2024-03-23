@@ -21,7 +21,7 @@ const StickyButtonComponent = (props) => {
     case "Random":
       txtAdd = "Add an organization"
       break;
-    case "Random2":
+    case "List":
       txtAdd = "Add a list"
       break;
     default:
@@ -39,7 +39,7 @@ const StickyButtonComponent = (props) => {
       case "Random":
         props.addOrga(addName)
         break;
-      case "Random2":
+      case "List":
         props.addList(addName,endUrl);
         break;
       default:

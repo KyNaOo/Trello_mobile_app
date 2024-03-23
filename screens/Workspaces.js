@@ -136,7 +136,7 @@ export default function Workspaces() {
             {dataWorkspace && dataWorkspace.map((workspace) => {
                 return(
                     <View>
-                        <Organization addKanban={addKanban} setFormValid={setFormValid} tokenRefresh={tokenRefresh} organization={workspace} endUrl={endUrl} formValid={formValid} getOrga={getOrga} update={updateOrga} add={addBoard}/>
+                        <Organization navigation={navigation} addKanban={addKanban} setFormValid={setFormValid} tokenRefresh={tokenRefresh} organization={workspace} endUrl={endUrl} formValid={formValid} getOrga={getOrga} update={updateOrga} add={addBoard}/>
                     </View>
                 )
             })}

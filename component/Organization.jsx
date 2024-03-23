@@ -39,7 +39,7 @@ const Organization = props => {
     }
 
     const openBoardScreen = (board) => {
-        navigation.navigate('Random2', {board: board})
+        navigation.navigate('List', {board: board})
     }
 
     useEffect(() => {

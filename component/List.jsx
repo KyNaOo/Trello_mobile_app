@@ -92,7 +92,6 @@ const List = props => {
                     ) : (
                       <TouchableOpacity onPress={() => handleDoubleTap(card)}>
                         <Text style={styles.cardTitle}>{card.name}</Text>
-                        <Text>{card.id}</Text>
                         
                       </TouchableOpacity>
                     )}

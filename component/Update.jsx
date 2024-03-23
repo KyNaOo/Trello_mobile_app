@@ -27,7 +27,7 @@ const Update = props => {
                         break;
                 }
                 break;
-            case 'Random2':
+            case 'List':
                 switch (props.action){
                     case 'Rename':
                         setAskLbl('Rename your list :');

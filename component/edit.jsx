@@ -15,7 +15,7 @@ const Edit = props => {
     case 'Random':
       txtAdd = 'Add a board'
       break;
-    case 'Random2':
+    case 'List':
       txtAdd = 'Add a card'
       break;
     default:

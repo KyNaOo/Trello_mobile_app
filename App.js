@@ -62,6 +62,17 @@ const tabScreenOptions = (iconLibrary, iconName, Name) => ({
         </View>
     ),
 });
+
+function Home() {
+    return (
+
+        <Tab.Navigator screenOptions={screenOptions}>
+          <Tab.Screen name="Random" component={Workspaces} options={tabScreenOptions('Entypo', 'blackboard','Board')} />
+          <Tab.Screen name="Random3" component={Documentation} options={tabScreenOptions('Ionicons', 'information-circle', 'Documentation')} />
+        </ Tab.Navigator>
+    )
+}
+
 export default function App() {
   const apiKey = process.env.EXPO_PUBLIC_API_KEY;
   const apiToken = process.env.EXPO_PUBLIC_API_TOKEN;
@@ -86,32 +97,16 @@ export default function App() {
 
     return (
         <>
+        <MenuProvider>
             <TopBar/>
-            <MenuProvider>
-            <NavigationContainer>
-                <Tab.Navigator screenOptions={screenOptions}>
-                <Tab.Screen name="Random" component={Workspaces} options={tabScreenOptions('Entypo', 'blackboard','Board')} />
-                
-                <Tab.Screen
-    name="Random2"
-    component={Boards}
-    options={{
-        tabBarIcon: () => (
-            <View style={[{ opacity: 0, width: 0, height: 0 }]}>
-            </View>
-        ),
-        tabBarButton: (props) => <TouchableOpacity {...props} disabled={true} />,
-    }}
-/>
-
-                <Tab.Screen name="Random3" component={Documentation} options={tabScreenOptions('Ionicons', 'information-circle', 'Documentation')} />
-
-                </Tab.Navigator>
-            </NavigationContainer>
-            </MenuProvider>
-            
-         
+            <NavigationContainer>          
+                <Stack.Navigator>
+                    <Stack.Screen name="Home" component={Home} options={{headerShown: false}}/>
+                    <Stack.Screen name={"List"} component={Boards} options={{}}/>
+                </Stack.Navigator>
+            </NavigationContainer>                
             <StatusBar style={"light"}/>
+            </MenuProvider>
         </>
     );
 }
