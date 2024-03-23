@@ -81,7 +81,7 @@ export default function RandomScreen3() {
         Delete your Card
       </Text>
       <Text>
-          Double tap quickly the card
+          Double tap quickly the card name
       </Text>
 
       <Text style={styles.instructions}>
