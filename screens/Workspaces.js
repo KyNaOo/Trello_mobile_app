@@ -98,7 +98,7 @@ export default function Workspaces() {
     }
 
     const addKanban = async (id, name) => {
-        const url = `https://api.trello.com/1/boards/?name=${name}&idOrganization=${id}&idBoardSource=65ddb77d79b99cc22c05dd14&${endUrl}`;
+        const url = `https://api.trello.com/1/boards/?name=${name}&idOrganization=${id}&idBoardSource=65fdee34a80e41cbfde8544e&${endUrl}`;
         const response = await fetch(url, {
             method: 'POST',
             headers: {
@@ -106,7 +106,6 @@ export default function Workspaces() {
                 'Accept': 'application/json',
             },
         })
-        console.warn(response.status)
         if (response.ok){
             setFormValid(!formValid);
         }else{

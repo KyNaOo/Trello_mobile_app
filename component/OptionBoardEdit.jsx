@@ -58,10 +58,10 @@ const OptionBoardEdit = props => {
     return (
         // <TouchableOpacity>
         <View>
-            <TouchableOpacity style={styles.row} onPress={() => openBoardScreen()}>
-                <Entypo name="chevron-thin-left" size={25} color="black"/>
-                <Text>Back</Text>
-            </TouchableOpacity>
+            {/*<TouchableOpacity style={styles.row} onPress={() => openBoardScreen()}>*/}
+            {/*    <Entypo name="chevron-thin-left" size={25} color="black"/>*/}
+            {/*    <Text>Back</Text>*/}
+            {/*</TouchableOpacity>*/}
             <Menu>
             <MenuTrigger>
                 <View style={styles.title}>
